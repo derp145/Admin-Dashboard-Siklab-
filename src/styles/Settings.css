@@ -1,0 +1,275 @@
+/* ===============================
+   PAGE LAYOUT
+================================= */
+.settings-page {
+  padding: 20px;
+}
+
+.settings-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.settings-title {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-h1 {
+  margin: 0;
+}
+
+.settings-sub {
+  margin-top: 6px;
+  opacity: 0.8;
+}
+
+/* ===============================
+   ACTIONS
+================================= */
+.settings-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings-saved {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.settings-btn {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: 0.2s ease;
+}
+
+.settings-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.settings-btn-primary {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.14);
+  font-weight: 600;
+}
+
+.settings-btn-ghost {
+  background: transparent;
+}
+
+/* ===============================
+   GRID
+================================= */
+.settings-grid {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 14px;
+}
+
+/* ===============================
+   CARD (GLASS)
+================================= */
+.settings-card {
+  border-radius: 14px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(6px);
+}
+
+.settings-card-head {
+  margin-bottom: 14px;
+}
+
+.settings-h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.settings-desc {
+  margin-top: 6px;
+  margin-bottom: 0;
+  font-size: 13px;
+  opacity: 0.78;
+}
+
+/* ===============================
+   ROWS
+================================= */
+.settings-row {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 12px;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.settings-row-label {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+/* ===============================
+   INPUTS (FORCE GLASS STYLE)
+================================= */
+.settings-page input.settings-input {
+  width: 100%;
+  padding: 10px 12px !important;
+  border-radius: 10px !important;
+  outline: none !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: inherit !important;
+
+  backdrop-filter: blur(6px);
+  transition: 0.2s ease;
+}
+
+.settings-page input.settings-input::placeholder {
+  color: rgba(255, 255, 255, 0.55) !important;
+}
+
+.settings-page input.settings-input:hover {
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+.settings-page input.settings-input:focus {
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1) !important;
+}
+
+.settings-input-readonly {
+  opacity: 0.8;
+}
+
+/* ===============================
+   TOGGLES
+================================= */
+.settings-toggle {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.settings-toggle-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-toggle-label {
+  font-size: 13px;
+  opacity: 0.9;
+}
+
+.settings-toggle-desc {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.settings-toggle-control input {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #8b5cf6;
+}
+
+/* ===============================
+   PORTAL DROPDOWN (scroll safe)
+================================= */
+.gs-trigger {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 10px;
+  outline: none;
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+  backdrop-filter: blur(6px);
+}
+
+.gs-trigger:hover {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.gs-trigger:focus {
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.gs-chevron {
+  opacity: 0.85;
+  transition: transform 180ms ease, opacity 180ms ease;
+}
+
+.gs-chevron.open {
+  transform: rotate(180deg);
+}
+
+/* floating panel */
+.gs-panel-portal {
+  position: fixed;
+  z-index: 99999;
+
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(10, 10, 20, 0.78);
+  backdrop-filter: blur(10px);
+
+  overflow: hidden;
+
+  transform-origin: top;
+  transform: translateY(-8px) scaleY(0.96);
+  opacity: 0;
+  transition: transform 220ms ease, opacity 220ms ease;
+}
+
+.gs-panel-portal.open {
+  transform: translateY(0) scaleY(1);
+  opacity: 1;
+}
+
+.gs-option {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: background 150ms ease;
+}
+
+.gs-option:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.gs-option.active {
+  background: rgba(255, 255, 255, 0.12);
+}

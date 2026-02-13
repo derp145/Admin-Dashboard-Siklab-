@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { 
-  LayoutDashboard, 
-  Users, 
-  Gamepad2, 
-  Smartphone, 
-  LogOut, 
-  ChevronLeft, 
+import {
+  LayoutDashboard,
+  Users,
+  Gamepad2,
+  Smartphone,
+  Settings, // ✅ added
+  LogOut,
+  ChevronLeft,
   ChevronRight,
-  Zap 
+  Zap
 } from "lucide-react";
 import "./Sidebar.css";
 
@@ -27,14 +28,19 @@ const Sidebar = () => {
   return (
     <>
       {/* The Arrow Toggle Button */}
-      <button className={`sidebar-toggle ${!isOpen ? "collapsed" : ""}`} onClick={toggleSidebar}>
+      <button
+        className={`sidebar-toggle ${!isOpen ? "collapsed" : ""}`}
+        onClick={toggleSidebar}
+      >
         {isOpen ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
       </button>
 
       <aside className={`sidebar ${!isOpen ? "collapsed" : ""}`}>
         <div className="logo">
           {isOpen ? (
-            <>Sik<span>Lab</span></>
+            <>
+              Sik<span>Lab</span>
+            </>
           ) : (
             <span>S.</span>
           )}
@@ -63,6 +69,12 @@ const Sidebar = () => {
           <NavLink to="/dashboard/platformstats" className="nav-item">
             <Smartphone size={22} className="nav-icon" />
             {isOpen && <span className="nav-label">Platform Stats</span>}
+          </NavLink>
+
+          {/* ✅ NEW: Settings (keeps same styling/animations) */}
+          <NavLink to="/dashboard/settings" className="nav-item">
+            <Settings size={22} className="nav-icon" />
+            {isOpen && <span className="nav-label">Settings</span>}
           </NavLink>
         </nav>
 
