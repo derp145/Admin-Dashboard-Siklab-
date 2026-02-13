@@ -1,0 +1,148 @@
+/* src/styles/Header.css (Blue-Purple Theme) */
+
+.header {
+  background: #0f0f2a; /* dark blue base to match sidebar */
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.header-left h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.header-left p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: #a5b4fc; /* light purple text for subtitle */
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  color: #94a3b8; /* muted icon */
+  pointer-events: none;
+}
+
+.search-input {
+  padding: 8px 16px;
+  padding-left: 36px; /* room for icon */
+  border-radius: 10px;
+  border: 1px solid #334155;
+  outline: none;
+  background: #1a1a3a; /* dark purple-blue background */
+  color: white;
+  width: 200px;
+  transition: width 0.3s ease, border-color 0.3s ease;
+}
+
+.search-input:focus {
+  border-color: #8b5cf6; /* purple focus */
+  width: 250px;
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  background: linear-gradient(135deg, #8b5cf6, #3b82f6); /* purple to blue gradient */
+  border-radius: 50%;
+  border: 2px solid #1a1a3a; /* matches header bg */
+  cursor: pointer;
+}
+
+/* Notification wrapper & dot */
+.notification-wrapper {
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  color: #a5b4fc; /* muted purple text by default */
+}
+
+.notification-wrapper:hover {
+  background: rgba(139, 92, 246, 0.1); /* subtle purple hover */
+  color: #c084fc; /* brighter purple on hover */
+}
+
+.notification-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  background: #c084fc; /* purple dot */
+  border: 2px solid #0f0f2a; /* matches header bg */
+  border-radius: 50%;
+}
+
+.notification-dot::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #c084fc;
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+/* =====================
+   RESPONSIVE QUERIES
+===================== */
+
+@media (max-width: 768px) {
+  .header {
+    padding: 12px 16px;
+  }
+
+  .header-left p {
+    display: none; /* hide subtitle */
+  }
+
+  .search-input {
+    width: 120px;
+  }
+  
+  .search-input:focus {
+    width: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-input {
+    display: none; /* hide search on very small screens */
+  }
+  
+  .header-left h3 {
+    font-size: 16px;
+  }
+}

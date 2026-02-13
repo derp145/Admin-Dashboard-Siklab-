@@ -1,0 +1,51 @@
+/* src/styles/CommonLayout.css */
+
+.layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: radial-gradient(circle at top right, #17052e, #060621);
+}
+
+/* RESPONSIVE ADDITION: 
+   On screens smaller than 768px (Tablets/Phones), 
+   we change the direction to column */
+@media (max-width: 768px) {
+  .layout {
+    flex-direction: column;
+  }
+}
+
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%; /* Ensure it takes full width */
+  overflow: hidden;
+}
+
+.page-content {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+/* RESPONSIVE ADDITION: 
+   Shrink padding on mobile so content has more room */
+@media (max-width: 480px) {
+  .page-content {
+    padding: 20px 15px;
+  }
+}
+
+/* Custom Scrollbar */
+.page-content::-webkit-scrollbar {
+  width: 6px;
+}
+.page-content::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 10px;
+}

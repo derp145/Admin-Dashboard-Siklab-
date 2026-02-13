@@ -1,0 +1,125 @@
+.platform-stats {
+  background: #0f0f2a;
+  padding: 40px;
+  font-family: "Inter", sans-serif;
+  color: #e0e7ff;
+}
+
+.dashboard-header h1 {
+  color: #8b5cf6;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.kpi-card {
+  background: #1a1a3a;
+  padding: 20px;
+  border-radius: 14px;
+  color: #e0e7ff;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+
+.kpi-title {
+  color: #a5b4fc;
+}
+
+.kpi-value {
+  font-weight: 600;
+  color: #fbbf24; /* Important KPI numbers */
+}
+
+.kpi-trend {
+  color: #8b5cf6;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: #1a1a3a;
+  padding: 20px;
+  border-radius: 12px;
+  color: #e0e7ff;
+}
+
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 180px;
+}
+
+.bar-group .bar {
+  width: 12px;
+  border-radius: 4px 4px 0 0;
+}
+
+.bar-group .ios {
+  background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+}
+
+.bar-group .android {
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+}
+
+.bar-group .uninstall {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+}
+
+.bar-label {
+  font-size: 10px;
+  color: #a5b4fc;
+  margin-top: 4px;
+}
+
+.legend .dot.ios { background: #8b5cf6; }
+.legend .dot.android { background: #3b82f6; }
+.legend .dot.uninstall { background: #6366f1; }
+
+.store-list .store-row {
+  background: #0f0f2a;
+  border: 1px solid #334155;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+
+.store-bar-wrapper {
+  background: #1a1a3a;
+  border-radius: 6px;
+  flex: 1;
+}
+
+.store-bar {
+  height: 100%;
+  border-radius: 6px 0 0 6px;
+  transition: width 0.5s;
+}
+
+.platform-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #1a1a3a;
+}
+
+.platform-table th {
+  color: #a5b4fc;
+  text-align: left;
+  padding: 10px;
+}
+
+.platform-table td {
+  padding: 12px;
+  border-top: 1px solid #334155;
+  color: #e0e7ff;
+}
+

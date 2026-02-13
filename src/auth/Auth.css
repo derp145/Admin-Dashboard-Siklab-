@@ -1,0 +1,374 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap");
+
+* {
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background-color: #0b1124; /* lighter than before */
+}
+
+/* ===========================
+   AUTH PAGE BACKGROUND
+=========================== */
+
+.auth-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      80% 60% at 50% 100%,
+      rgba(234, 146, 51, 0.15),
+      rgba(0, 0, 0, 0.05) 60%
+    ),
+    linear-gradient(180deg, #0b1124 0%, #1e293b 100%);
+}
+
+/* Ambient Glow Orbs */
+
+.auth-page::before,
+.auth-page::after {
+  content: "";
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(234,146,51,0.2), transparent 70%);
+  filter: blur(80px);
+  z-index: 0;
+}
+
+.auth-page::before {
+  top: 10%;
+  left: 10%;
+}
+
+.auth-page::after {
+  bottom: 10%;
+  right: 10%;
+}
+
+/* ===========================
+   AUTH CARD
+=========================== */
+
+.auth-card {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  min-height: 600px;
+  background: #1a253b; /* lighter than before */
+  border-radius: 24px;
+  border: 1px solid #334155;
+  overflow: hidden;
+  display: flex;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+/* ===========================
+   LEFT PANEL
+=========================== */
+
+.auth-left {
+  flex: 1.2;
+  padding: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("/src/assets/home_admin.png");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.auth-left::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(11,17,36,0.35),
+    rgba(11,17,36,0.65)
+  );
+  z-index: 1;
+}
+
+.auth-left-overlay {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.siklab-logo {
+  font-size: 72px;
+  font-weight: 900;
+  letter-spacing: 10px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  background: linear-gradient(180deg, #ffffff 40%, #fbbf59 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+  animation: floatLogo 4s ease-in-out infinite;
+}
+
+@keyframes floatLogo {
+  0%,100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.siklab-tagline {
+  color: #cbd5e1;
+  font-size: 14px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ===========================
+   RIGHT PANEL
+=========================== */
+
+.auth-right {
+  flex: 1;
+  padding: 60px 48px;
+  background: #1a253b;
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-left: 1px solid #334155;
+}
+
+.auth-right h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #f8fafc;
+}
+
+.auth-right p.subtitle {
+  color: #cbd5e1;
+  margin-bottom: 32px;
+  font-size: 14px;
+}
+
+/* ===========================
+   INPUTS
+=========================== */
+
+.auth-right input {
+  width: 100%;
+  padding: 14px 18px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  border: 1px solid #334155;
+  background: #2a3653;
+  color: #f8fafc;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.auth-right input:focus {
+  border-color: #fbbf59;
+  background: #1e2a45;
+  box-shadow:
+    0 0 0 1px rgba(251,191,89,0.3),
+    0 0 8px rgba(251,191,89,0.2);
+}
+
+/* ===========================
+   BUTTONS
+=========================== */
+
+.primary-btn {
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 16px;
+  color: #1a253b;
+  background: linear-gradient(135deg, #fbbf59, #fcd34d);
+  box-shadow:
+    0 4px 12px rgba(251,191,89,0.3),
+    inset 0 -2px 4px rgba(0,0,0,0.1);
+  transition: all 0.2s ease;
+}
+
+.primary-btn:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 8px 20px rgba(251,191,89,0.35),
+    inset 0 -2px 4px rgba(0,0,0,0.1);
+}
+
+.primary-btn:active {
+  transform: translateY(1px);
+  box-shadow:
+    0 2px 6px rgba(251,191,89,0.25),
+    inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #fbbf59;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.link-btn:hover {
+  color: #fcd34d;
+  text-decoration: underline;
+}
+
+/* ===========================
+   OTP INPUTS
+=========================== */
+
+.code-inputs {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.code-inputs input {
+  width: 52px;
+  height: 60px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  border-radius: 12px;
+  border: 1px solid #4b5563;
+  background: #1e2a45;
+  color: #fbbf59;
+}
+
+.code-inputs input:focus {
+  border-color: #fbbf59;
+  outline: none;
+  box-shadow:
+    0 0 0 1px rgba(251,191,89,0.5),
+    0 0 15px rgba(251,191,89,0.35);
+}
+
+/* ===========================
+   MODAL OVERLAY
+=========================== */
+
+.modal-overlay-small {
+  position: absolute;
+  inset: 0;
+  background: rgba(11,17,36,0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  border-radius: 24px;
+  animation: backdropFade 0.25s ease-out;
+}
+
+/* ===========================
+   MODAL CARD
+=========================== */
+
+.modal-glass-small {
+  background: rgba(30,41,59,0.95);
+  border: 1px solid #4b5563;
+  border-radius: 20px;
+  padding: 32px 28px;
+  width: 90%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  color: #f8fafc;
+  animation: modalFade 0.25s ease-out;
+}
+
+.modal-glass-small h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.modal-glass-small p {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.6;
+}
+
+/* ===========================
+   MODAL BUTTONS
+=========================== */
+
+.modal-secondary {
+  display: flex;
+  justify-content: center;
+  gap: 28px; /* more safe spacing */
+}
+
+.modal-secondary .link-btn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  background: rgba(251,191,89,0.12);
+}
+
+.modal-secondary .link-btn:hover {
+  background: rgba(251,191,89,0.25);
+}
+
+.modal-secondary .link-btn:last-child {
+  color: #94a3b8;
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* ===========================
+   MODAL ANIMATION
+=========================== */
+
+@keyframes modalFade {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes backdropFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media (max-width: 900px) {
+  .auth-card {
+    flex-direction: column;
+    max-width: 500px;
+  }
+
+  .auth-left {
+    display: none;
+  }
+}

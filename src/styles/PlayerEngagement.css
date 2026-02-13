@@ -1,0 +1,119 @@
+.dashboard-container {
+  background: #0f0f2a;
+  padding: 40px;
+  font-family: "Inter", sans-serif;
+  color: #e0e7ff;
+}
+
+.dashboard-header h1 {
+  font-size: 28px;
+  color: #8b5cf6;
+}
+
+.dashboard-header p {
+  color: #a5b4fc;
+  margin-top: 4px;
+}
+
+.stats-grid .stat-card {
+  background: #1a1a3a;
+  color: #e0e7ff;
+}
+
+.stats-grid .stat-card:hover {
+  background: #2c2c5a;
+}
+
+.stat-label {
+  color: #a5b4fc;
+}
+
+.stat-value {
+  color: #fbbf24; /* Important stat numbers */
+}
+
+.stat-trend {
+  color: #3b82f6;
+}
+
+.dashboard-top-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.chart-section h3,
+.table-section h3 {
+  color: #8b5cf6;
+}
+
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  height: 200px;
+  background: #1a1a3a;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.bar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 24px;
+}
+
+.bar {
+  width: 100%;
+  background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+  position: relative;
+  border-radius: 6px 6px 0 0;
+}
+
+.bar-tooltip {
+  position: absolute;
+  top: -24px;
+  font-size: 10px;
+  color: #fbbf24; /* Emphasize values */
+}
+
+.bar-label {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #a5b4fc;
+}
+
+.engagement-table,
+.players-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #1a1a3a;
+  color: #e0e7ff;
+}
+
+.engagement-table th,
+.players-table th {
+  color: #a5b4fc;
+  text-align: left;
+  padding: 10px;
+}
+
+.engagement-table td,
+.players-table td {
+  padding: 12px;
+  border-top: 1px solid #334155;
+  color: #e0e7ff;
+}
+
+.progress-bg {
+  background: #0f0f2a;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+  height: 100%;
+}
