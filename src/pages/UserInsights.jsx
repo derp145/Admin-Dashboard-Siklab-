@@ -184,7 +184,7 @@ const UserInsights = () => {
         <div>
           <h2 className="section-title">User Insights</h2>
           <p className="section-sub">
-            Filter demographics and view player trends (Kinder removed).
+            Filter demographics and view player trends.
           </p>
         </div>
 
