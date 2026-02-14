@@ -1,16 +1,46 @@
-import React from "react";
+import React, { useMemo } from "react";
 import "../styles/PlatformStats.css";
 import {
   PLATFORM_KPI,
   INSTALL_CHART_DATA,
   STORE_DISTRIBUTION,
   PLATFORM_DETAILS,
-} from "../common/MockData"; 
+} from "../common/MockData";
 
 export default function PlatformStats() {
-  const maxInstallValue = Math.max(
-    ...INSTALL_CHART_DATA.flatMap((m) => [m.ios, m.android, m.uninstalls])
+  const MONTHS = useMemo(
+    () => ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+    []
   );
+
+  // Normalize data to 12 months
+  const chartData = useMemo(() => {
+    const map = new Map((INSTALL_CHART_DATA || []).map((d) => [String(d.month), d]));
+
+    return MONTHS.map((m) => {
+      const src = map.get(m) || {};
+      return {
+        month: m,
+        ios: Number(src.ios ?? 0),
+        android: Number(src.android ?? 0),
+        uninstalls: Number(src.uninstalls ?? 0),
+      };
+    });
+  }, [MONTHS]);
+
+  const maxInstallValue = useMemo(() => {
+    const all = chartData.flatMap((m) => [m.ios + m.android, m.uninstalls]);
+    const max = Math.max(...all, 0);
+    return max > 0 ? max : 1;
+  }, [chartData]);
+
+  const getBarStyle = (value) => {
+    const pct = (value / maxInstallValue) * 100;
+    return {
+      height: `${pct}%`,
+      minHeight: value > 0 ? "6px" : "0px",
+    };
+  };
 
   return (
     <div className="platform-stats">
@@ -37,33 +67,37 @@ export default function PlatformStats() {
         {/* Install Chart */}
         <div className="card">
           <h2>Installs & Uninstalls</h2>
-          <div className="bar-chart">
-            {INSTALL_CHART_DATA.map((item, idx) => (
-              <div key={idx} className="bar-group">
-                <div
-                  className="bar ios"
-                  style={{ height: `${(item.ios / maxInstallValue) * 100}%` }}
-                  title={`iOS: ${item.ios}`}
-                />
-                <div
-                  className="bar android"
-                  style={{ height: `${(item.android / maxInstallValue) * 100}%` }}
-                  title={`Android: ${item.android}`}
-                />
-                <div
-                  className="bar uninstall"
-                  style={{ height: `${(item.uninstalls / maxInstallValue) * 100}%` }}
-                  title={`Uninstalls: ${item.uninstalls}`}
-                />
-                <span className="bar-label">{item.month}</span>
-              </div>
-            ))}
+
+          <div className="ps-bar-chart-frame">
+            <div className="ps-bar-chart">
+              {chartData.map((item) => {
+                const installs = item.ios + item.android;
+
+                return (
+                  <div key={item.month} className="ps-bar-group">
+                    <div className="ps-bar-stack">
+                      <div
+                        className="ps-bar ps-installs"
+                        style={getBarStyle(installs)}
+                        title={`Installs: ${installs}`}
+                      />
+                      <div
+                        className="ps-bar ps-uninstall"
+                        style={getBarStyle(item.uninstalls)}
+                        title={`Uninstalls: ${item.uninstalls}`}
+                      />
+                    </div>
+
+                    <span className="ps-bar-label">{item.month}</span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="legend">
-            <span className="dot ios" /> iOS
-            <span className="dot android" /> Android
-            <span className="dot uninstall" /> Uninstalls
+          <div className="ps-legend">
+            <span className="ps-dot ps-installs" /> Installs
+            <span className="ps-dot ps-uninstall" /> Uninstalls
           </div>
         </div>
 
@@ -74,6 +108,7 @@ export default function PlatformStats() {
             {STORE_DISTRIBUTION.map((store, idx) => (
               <div key={idx} className="store-row">
                 <div className="store-name">{store.name}</div>
+
                 <div className="store-bar-wrapper">
                   <div
                     className="store-bar"
@@ -83,6 +118,7 @@ export default function PlatformStats() {
                     }}
                   />
                 </div>
+
                 <div className="store-value">{store.value}%</div>
               </div>
             ))}

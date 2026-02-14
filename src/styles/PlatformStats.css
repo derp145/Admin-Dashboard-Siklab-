@@ -9,6 +9,7 @@
   color: #8b5cf6;
 }
 
+/* KPI GRID */
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -24,19 +25,11 @@
   box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 
-.kpi-title {
-  color: #a5b4fc;
-}
+.kpi-title { color: #a5b4fc; }
+.kpi-value { font-weight: 600; }
+.kpi-trend { color: #8b5cf6; }
 
-.kpi-value {
-  font-weight: 600;
-  color: #fbbf24; /* Important KPI numbers */
-}
-
-.kpi-trend {
-  color: #8b5cf6;
-}
-
+/* CHART GRID */
 .charts-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -51,64 +44,136 @@
   color: #e0e7ff;
 }
 
-.bar-chart {
+/* ===============================
+   ✅ PLATFORM STATS CHART (NAMESPACED)
+================================= */
+
+.ps-bar-chart-frame {
+  margin-top: 12px;
+  padding: 18px;
+  border-radius: 16px;
+  background: rgba(0,0,0,0.18);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.ps-bar-chart {
+  height: 260px;
   display: flex;
   align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(0,0,0,0.10);
+}
+
+.ps-bar-group {
+  flex: 1;
+  min-width: 30px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
   gap: 8px;
-  height: 180px;
 }
 
-.bar-group .bar {
-  width: 12px;
-  border-radius: 4px 4px 0 0;
+.ps-bar-stack {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 8px;
 }
 
-.bar-group .ios {
-  background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+.ps-bar {
+  width: 14px;
+  display: block;
+  border-radius: 12px 12px 0 0;
+  transition: height 0.35s ease;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.25);
 }
 
-.bar-group .android {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+.ps-installs {
+  background: linear-gradient(180deg, #a78bfa, #3b82f6);
 }
 
-.bar-group .uninstall {
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+.ps-uninstall {
+  background: linear-gradient(180deg, #ef4444, #8b5cf6);
 }
 
-.bar-label {
-  font-size: 10px;
+.ps-bar-label {
+  font-size: 11px;
   color: #a5b4fc;
-  margin-top: 4px;
+  text-align: center;
 }
 
-.legend .dot.ios { background: #8b5cf6; }
-.legend .dot.android { background: #3b82f6; }
-.legend .dot.uninstall { background: #6366f1; }
+/* legend */
+.ps-legend {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  color: #a5b4fc;
+  font-size: 13px;
+}
 
-.store-list .store-row {
+.ps-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+/* make dots match bars */
+.ps-dot.ps-installs {
+  background: #a78bfa;
+}
+
+.ps-dot.ps-uninstall {
+  background: #ef4444;
+}
+
+/* STORE LIST */
+.store-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
   background: #0f0f2a;
   border: 1px solid #334155;
-  border-radius: 8px;
-  padding: 10px;
-  margin-bottom: 8px;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
 }
 
+.store-name { width: 120px; color: #a5b4fc; }
+
 .store-bar-wrapper {
-  background: #1a1a3a;
-  border-radius: 6px;
   flex: 1;
+  height: 12px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  overflow: hidden;
 }
 
 .store-bar {
   height: 100%;
-  border-radius: 6px 0 0 6px;
-  transition: width 0.5s;
+  border-radius: 999px;
+  transition: width 0.5s ease;
 }
 
+.store-value { width: 50px; text-align: right; color: #e0e7ff; }
+
+/* TABLE */
 .platform-table {
   width: 100%;
   border-collapse: collapse;
   background: #1a1a3a;
+  margin-top: 10px;
 }
 
 .platform-table th {
@@ -123,3 +188,9 @@
   color: #e0e7ff;
 }
 
+@media (max-width: 900px) {
+  .charts-grid { grid-template-columns: 1fr; }
+  .platform-stats { padding: 20px; }
+  .ps-bar { width: 10px; }
+  .ps-bar-group { min-width: 24px; }
+}
