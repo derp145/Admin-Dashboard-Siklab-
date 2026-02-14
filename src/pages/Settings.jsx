@@ -29,8 +29,6 @@ function GlassSelect({ value, options, onChange, placeholder = "Select..." }) {
     if (!open) return;
 
     computePos();
-
-    // Ensure transition plays
     setAnimate(false);
     requestAnimationFrame(() => setAnimate(true));
 
@@ -151,6 +149,7 @@ export default function Settings() {
 
   const [data, setData] = useState(initial);
   const [saved, setSaved] = useState(false);
+  const [active, setActive] = useState("profile");
 
   const update = (section, key, value) => {
     setSaved(false);
@@ -173,8 +172,65 @@ export default function Settings() {
     setSaved(false);
   };
 
+  // Refs for scroll targets
+  const contentRef = useRef(null);
+  const sectionRefs = useRef({
+    profile: null,
+    security: null,
+    notifications: null,
+    appearance: null,
+    system: null,
+  });
+
+  const scrollToSection = (key) => {
+    const container = contentRef.current;
+    const target = sectionRefs.current[key];
+    if (!container || !target) return;
+
+    setActive(key);
+
+    const containerTop = container.getBoundingClientRect().top;
+    const targetTop = target.getBoundingClientRect().top;
+    const delta = targetTop - containerTop;
+
+    container.scrollTo({
+      top: container.scrollTop + delta - 8,
+      behavior: "smooth",
+    });
+  };
+
+  // update active sidebar item while scrolling
+  useEffect(() => {
+    const el = contentRef.current;
+    if (!el) return;
+
+    const onScroll = () => {
+      const keys = Object.keys(sectionRefs.current);
+      let bestKey = "profile";
+      let bestDist = Infinity;
+
+      const containerTop = el.getBoundingClientRect().top;
+
+      keys.forEach((k) => {
+        const node = sectionRefs.current[k];
+        if (!node) return;
+        const dist = Math.abs(node.getBoundingClientRect().top - containerTop - 10);
+        if (dist < bestDist) {
+          bestDist = dist;
+          bestKey = k;
+        }
+      });
+
+      setActive(bestKey);
+    };
+
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => el.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <div className="dashboard-container settings-page">
+      {/* Top bar stays */}
       <div className="settings-top">
         <div className="settings-title">
           <h1 className="settings-h1">Settings</h1>
@@ -206,167 +262,232 @@ export default function Settings() {
         </div>
       </div>
 
-      <div className="settings-grid">
-        {/* PROFILE */}
-        <Card title="Profile" desc="Basic admin account information.">
-          <Row label="Display name">
-            <input
-              className="settings-input"
-              value={data.profile.displayName}
-              onChange={(e) =>
-                update("profile", "displayName", e.target.value)
-              }
-              placeholder="e.g., Xandra"
-            />
-          </Row>
+      {/* NEW: Settings layout with inner sidebar + scrollable content */}
+      <div className="settings-layout">
+        <aside className="settings-side">
+          <div className="settings-side-card">
+            <button
+              type="button"
+              className={`settings-side-item ${active === "profile" ? "active" : ""}`}
+              onClick={() => scrollToSection("profile")}
+            >
+              Profile
+            </button>
 
-          <Row label="Email (read-only)">
-            <input
-              className="settings-input settings-input-readonly"
-              value={data.profile.email}
-              readOnly
-            />
-          </Row>
+            <button
+              type="button"
+              className={`settings-side-item ${active === "security" ? "active" : ""}`}
+              onClick={() => scrollToSection("security")}
+            >
+              Security
+            </button>
 
-          <Row label="Role (read-only)">
-            <input
-              className="settings-input settings-input-readonly"
-              value={data.profile.role}
-              readOnly
-            />
-          </Row>
+            <button
+              type="button"
+              className={`settings-side-item ${active === "notifications" ? "active" : ""}`}
+              onClick={() => scrollToSection("notifications")}
+            >
+              Notifications
+            </button>
 
-          <Row label="Timezone">
-            <GlassSelect
-              value={data.profile.timezone}
-              onChange={(v) => update("profile", "timezone", v)}
-              options={[
-                { value: "Asia/Manila", label: "Asia/Manila" },
-                { value: "Asia/Singapore", label: "Asia/Singapore" },
-                { value: "Asia/Tokyo", label: "Asia/Tokyo" },
-                { value: "UTC", label: "UTC" },
-              ]}
-            />
-          </Row>
-        </Card>
+            <button
+              type="button"
+              className={`settings-side-item ${active === "appearance" ? "active" : ""}`}
+              onClick={() => scrollToSection("appearance")}
+            >
+              Appearance
+            </button>
 
-        {/* SECURITY */}
-        <Card title="Security" desc="Protect the admin account and sessions.">
-          <Toggle
-            label="Enable Two-Factor Authentication (2FA)"
-            desc="Require an extra verification step during sign-in."
-            checked={data.security.twoFA}
-            onChange={(v) => update("security", "twoFA", v)}
-          />
+            <button
+              type="button"
+              className={`settings-side-item ${active === "system" ? "active" : ""}`}
+              onClick={() => scrollToSection("system")}
+            >
+              System
+            </button>
+          </div>
+        </aside>
 
-          <Row label="Session timeout">
-            <GlassSelect
-              value={String(data.security.sessionTimeout)}
-              onChange={(v) =>
-                update("security", "sessionTimeout", Number(v))
-              }
-              options={[
-                { value: "15", label: "15 minutes" },
-                { value: "30", label: "30 minutes" },
-                { value: "60", label: "1 hour" },
-                { value: "120", label: "2 hours" },
-              ]}
-            />
-          </Row>
+        <main className="settings-content" ref={contentRef}>
+          <div
+            ref={(n) => (sectionRefs.current.profile = n)}
+            className="settings-section"
+          >
+            <Card title="Profile" desc="Basic admin account information.">
+              <Row label="Display name">
+                <input
+                  className="settings-input"
+                  value={data.profile.displayName}
+                  onChange={(e) =>
+                    update("profile", "displayName", e.target.value)
+                  }
+                  placeholder="e.g., Xandra"
+                />
+              </Row>
 
-          <Toggle
-            label='Allow "Remember me"'
-            desc="Lets admins stay signed in on trusted devices."
-            checked={data.security.allowRememberMe}
-            onChange={(v) => update("security", "allowRememberMe", v)}
-          />
-        </Card>
+              <Row label="Email (read-only)">
+                <input
+                  className="settings-input settings-input-readonly"
+                  value={data.profile.email}
+                  readOnly
+                />
+              </Row>
 
-        {/* NOTIFICATIONS */}
-        <Card title="Notifications" desc="Control what gets sent to your email.">
-          <Toggle
-            label="Email reports"
-            desc="Receive scheduled performance/analytics reports."
-            checked={data.notifications.emailReports}
-            onChange={(v) => update("notifications", "emailReports", v)}
-          />
-          <Toggle
-            label="Security alerts"
-            desc="Get notified about suspicious logins and critical changes."
-            checked={data.notifications.securityAlerts}
-            onChange={(v) => update("notifications", "securityAlerts", v)}
-          />
-          <Toggle
-            label="Weekly summary"
-            desc="A weekly recap of key metrics."
-            checked={data.notifications.weeklySummary}
-            onChange={(v) => update("notifications", "weeklySummary", v)}
-          />
-          <Toggle
-            label="Product updates"
-            desc="Optional announcements and feature updates."
-            checked={data.notifications.productUpdates}
-            onChange={(v) => update("notifications", "productUpdates", v)}
-          />
-        </Card>
+              <Row label="Role (read-only)">
+                <input
+                  className="settings-input settings-input-readonly"
+                  value={data.profile.role}
+                  readOnly
+                />
+              </Row>
 
-        {/* APPEARANCE */}
-        <Card title="Appearance" desc="UI preferences for the dashboard.">
-          <Row label="Theme">
-            <GlassSelect
-              value={data.appearance.theme}
-              onChange={(v) => update("appearance", "theme", v)}
-              options={[
-                { value: "system", label: "System" },
-                { value: "light", label: "Light" },
-                { value: "dark", label: "Dark" },
-              ]}
-            />
-          </Row>
+              <Row label="Timezone">
+                <GlassSelect
+                  value={data.profile.timezone}
+                  onChange={(v) => update("profile", "timezone", v)}
+                  options={[
+                    { value: "Asia/Manila", label: "Asia/Manila" },
+                    { value: "Asia/Singapore", label: "Asia/Singapore" },
+                    { value: "Asia/Tokyo", label: "Asia/Tokyo" },
+                    { value: "UTC", label: "UTC" },
+                  ]}
+                />
+              </Row>
+            </Card>
+          </div>
 
-          <Toggle
-            label="Compact sidebar"
-            desc="Use smaller spacing in the sidebar."
-            checked={data.appearance.compactSidebar}
-            onChange={(v) => update("appearance", "compactSidebar", v)}
-          />
+          <div
+            ref={(n) => (sectionRefs.current.security = n)}
+            className="settings-section"
+          >
+            <Card title="Security" desc="Protect the admin account and sessions.">
+              <Toggle
+                label="Enable Two-Factor Authentication (2FA)"
+                desc="Require an extra verification step during sign-in."
+                checked={data.security.twoFA}
+                onChange={(v) => update("security", "twoFA", v)}
+              />
 
-          <Toggle
-            label="Reduce motion"
-            desc="Minimize animations for accessibility."
-            checked={data.appearance.reduceMotion}
-            onChange={(v) => update("appearance", "reduceMotion", v)}
-          />
-        </Card>
+              <Row label="Session timeout">
+                <GlassSelect
+                  value={String(data.security.sessionTimeout)}
+                  onChange={(v) => update("security", "sessionTimeout", Number(v))}
+                  options={[
+                    { value: "15", label: "15 minutes" },
+                    { value: "30", label: "30 minutes" },
+                    { value: "60", label: "1 hour" },
+                    { value: "120", label: "2 hours" },
+                  ]}
+                />
+              </Row>
 
-        {/* SYSTEM */}
-        <Card title="System" desc="Global admin controls.">
-          <Toggle
-            label="Maintenance mode"
-            desc="Temporarily disable player access while doing updates."
-            checked={data.system.maintenanceMode}
-            onChange={(v) => update("system", "maintenanceMode", v)}
-          />
+              <Toggle
+                label='Allow "Remember me"'
+                desc="Lets admins stay signed in on trusted devices."
+                checked={data.security.allowRememberMe}
+                onChange={(v) => update("security", "allowRememberMe", v)}
+              />
+            </Card>
+          </div>
 
-          <Toggle
-            label="Analytics tracking"
-            desc="Collect usage analytics for insights pages."
-            checked={data.system.analyticsTracking}
-            onChange={(v) => update("system", "analyticsTracking", v)}
-          />
+          <div
+            ref={(n) => (sectionRefs.current.notifications = n)}
+            className="settings-section"
+          >
+            <Card title="Notifications" desc="Control what gets sent to your email.">
+              <Toggle
+                label="Email reports"
+                desc="Receive scheduled performance/analytics reports."
+                checked={data.notifications.emailReports}
+                onChange={(v) => update("notifications", "emailReports", v)}
+              />
+              <Toggle
+                label="Security alerts"
+                desc="Get notified about suspicious logins and critical changes."
+                checked={data.notifications.securityAlerts}
+                onChange={(v) => update("notifications", "securityAlerts", v)}
+              />
+              <Toggle
+                label="Weekly summary"
+                desc="A weekly recap of key metrics."
+                checked={data.notifications.weeklySummary}
+                onChange={(v) => update("notifications", "weeklySummary", v)}
+              />
+              <Toggle
+                label="Product updates"
+                desc="Optional announcements and feature updates."
+                checked={data.notifications.productUpdates}
+                onChange={(v) => update("notifications", "productUpdates", v)}
+              />
+            </Card>
+          </div>
 
-          <Row label="Log level">
-            <GlassSelect
-              value={data.system.logLevel}
-              onChange={(v) => update("system", "logLevel", v)}
-              options={[
-                { value: "minimal", label: "Minimal" },
-                { value: "normal", label: "Normal" },
-                { value: "verbose", label: "Verbose" },
-              ]}
-            />
-          </Row>
-        </Card>
+          <div
+            ref={(n) => (sectionRefs.current.appearance = n)}
+            className="settings-section"
+          >
+            <Card title="Appearance" desc="UI preferences for the dashboard.">
+              <Row label="Theme">
+                <GlassSelect
+                  value={data.appearance.theme}
+                  onChange={(v) => update("appearance", "theme", v)}
+                  options={[
+                    { value: "system", label: "System" },
+                    { value: "light", label: "Light" },
+                    { value: "dark", label: "Dark" },
+                  ]}
+                />
+              </Row>
+
+              <Toggle
+                label="Compact sidebar"
+                desc="Use smaller spacing in the sidebar."
+                checked={data.appearance.compactSidebar}
+                onChange={(v) => update("appearance", "compactSidebar", v)}
+              />
+
+              <Toggle
+                label="Reduce motion"
+                desc="Minimize animations for accessibility."
+                checked={data.appearance.reduceMotion}
+                onChange={(v) => update("appearance", "reduceMotion", v)}
+              />
+            </Card>
+          </div>
+
+          <div
+            ref={(n) => (sectionRefs.current.system = n)}
+            className="settings-section"
+          >
+            <Card title="System" desc="Global admin controls.">
+              <Toggle
+                label="Maintenance mode"
+                desc="Temporarily disable player access while doing updates."
+                checked={data.system.maintenanceMode}
+                onChange={(v) => update("system", "maintenanceMode", v)}
+              />
+
+              <Toggle
+                label="Analytics tracking"
+                desc="Collect usage analytics for insights pages."
+                checked={data.system.analyticsTracking}
+                onChange={(v) => update("system", "analyticsTracking", v)}
+              />
+
+              <Row label="Log level">
+                <GlassSelect
+                  value={data.system.logLevel}
+                  onChange={(v) => update("system", "logLevel", v)}
+                  options={[
+                    { value: "minimal", label: "Minimal" },
+                    { value: "normal", label: "Normal" },
+                    { value: "verbose", label: "Verbose" },
+                  ]}
+                />
+              </Row>
+            </Card>
+          </div>
+        </main>
       </div>
     </div>
   );

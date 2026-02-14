@@ -1,16 +1,17 @@
 /* ===============================
-   PAGE LAYOUT
+   PAGE
 ================================= */
 .settings-page {
   padding: 20px;
 }
 
+/* top bar */
 .settings-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .settings-title {
@@ -70,13 +71,108 @@
 }
 
 /* ===============================
-   GRID
+   NEW: LAYOUT (INNER SIDEBAR + SCROLL CONTENT)
 ================================= */
-.settings-grid {
-  margin-top: 18px;
+.settings-layout {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: 260px 1fr;
   gap: 14px;
+
+  /* Only right side scrolls */
+  height: calc(100vh - 140px);
+}
+
+.settings-side {
+  position: sticky;
+  top: 0;
+  height: 100%;
+}
+
+.settings-side-card {
+  height: 100%;
+  border-radius: 14px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.settings-side-item {
+  text-align: left;
+  width: 100%;
+  padding: 12px 12px;
+  border-radius: 12px;
+
+  border: 1px solid transparent;
+  background: transparent;
+
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  transition: 0.2s ease;
+  font-weight: 600;
+}
+
+.settings-side-item:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(139, 92, 246, 0.18),
+    rgba(59, 130, 246, 0.18)
+  );
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.settings-side-item.active {
+  background: linear-gradient(
+    90deg,
+    rgba(139, 92, 246, 0.28),
+    rgba(59, 130, 246, 0.28)
+  );
+  border-color: rgba(192, 132, 252, 0.35);
+  color: #c084fc;
+  box-shadow: 0 0 10px rgba(192, 132, 252, 0.18);
+}
+
+.settings-content {
+  height: 100%;
+  overflow: auto;
+  padding-right: 4px;
+
+  scroll-behavior: smooth;
+}
+
+.settings-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.settings-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+}
+
+/* each section wrapper */
+.settings-section {
+  margin-bottom: 14px;
+}
+
+/* mobile layout */
+@media (max-width: 900px) {
+  .settings-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .settings-side {
+    position: relative;
+    height: auto;
+  }
+
+  .settings-content {
+    height: auto;
+    overflow: visible;
+  }
 }
 
 /* ===============================
@@ -123,18 +219,16 @@
 }
 
 /* ===============================
-   INPUTS (FORCE GLASS STYLE)
+   INPUTS
 ================================= */
 .settings-page input.settings-input {
   width: 100%;
   padding: 10px 12px !important;
   border-radius: 10px !important;
   outline: none !important;
-
   border: 1px solid rgba(255, 255, 255, 0.14) !important;
   background: rgba(255, 255, 255, 0.06) !important;
   color: inherit !important;
-
   backdrop-filter: blur(6px);
   transition: 0.2s ease;
 }
@@ -191,7 +285,7 @@
 }
 
 /* ===============================
-   PORTAL DROPDOWN (scroll safe)
+   PORTAL DROPDOWN
 ================================= */
 .gs-trigger {
   width: 100%;
@@ -199,16 +293,13 @@
   padding: 10px 12px;
   border-radius: 10px;
   outline: none;
-
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: rgba(255, 255, 255, 0.06);
   color: white;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-
   cursor: pointer;
   transition: 0.2s ease;
   backdrop-filter: blur(6px);
@@ -232,18 +323,14 @@
   transform: rotate(180deg);
 }
 
-/* floating panel */
 .gs-panel-portal {
   position: fixed;
   z-index: 99999;
-
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: rgba(10, 10, 20, 0.78);
   backdrop-filter: blur(10px);
-
   overflow: hidden;
-
   transform-origin: top;
   transform: translateY(-8px) scaleY(0.96);
   opacity: 0;
@@ -273,3 +360,4 @@
 .gs-option.active {
   background: rgba(255, 255, 255, 0.12);
 }
+

@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
   Gamepad2,
   Smartphone,
-  Settings, // ✅ added
+  Settings,
   LogOut,
   ChevronLeft,
   ChevronRight,
-  Zap
+  Zap,
+  X,
 } from "lucide-react";
 import "./Sidebar.css";
 
@@ -17,20 +18,47 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(true);
 
+  // ✅ modal state
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const modalRef = useRef(null);
+
+  const toggleSidebar = () => setIsOpen((v) => !v);
+
   const handleLogout = () => {
+    // your actual logout action later (clear tokens, etc.)
     navigate("/auth/signin", { replace: true });
   };
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
+  // ✅ close modal on ESC and click outside
+  useEffect(() => {
+    if (!showLogoutModal) return;
+
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") setShowLogoutModal(false);
+    };
+
+    const onMouseDown = (e) => {
+      if (modalRef.current && !modalRef.current.contains(e.target)) {
+        setShowLogoutModal(false);
+      }
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("mousedown", onMouseDown);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("mousedown", onMouseDown);
+    };
+  }, [showLogoutModal]);
 
   return (
     <>
-      {/* The Arrow Toggle Button */}
+      {/* Toggle Button */}
       <button
         className={`sidebar-toggle ${!isOpen ? "collapsed" : ""}`}
         onClick={toggleSidebar}
+        aria-label="Toggle sidebar"
       >
         {isOpen ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
       </button>
@@ -50,7 +78,9 @@ const Sidebar = () => {
           <NavLink
             to="/dashboard"
             end
-            className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
+            className={({ isActive }) =>
+              isActive ? "nav-item active" : "nav-item"
+            }
           >
             <LayoutDashboard size={22} className="nav-icon" />
             {isOpen && <span className="nav-label">Dashboard</span>}
@@ -71,7 +101,6 @@ const Sidebar = () => {
             {isOpen && <span className="nav-label">Platform Stats</span>}
           </NavLink>
 
-          {/* ✅ NEW: Settings (keeps same styling/animations) */}
           <NavLink to="/dashboard/settings" className="nav-item">
             <Settings size={22} className="nav-icon" />
             {isOpen && <span className="nav-label">Settings</span>}
@@ -80,16 +109,63 @@ const Sidebar = () => {
 
         <div className="sidebar-bottom">
           {isOpen && (
-            <button className="upgrade-btn">
+            <button className="upgrade-btn" type="button">
               <Zap size={16} fill="currentColor" /> Upgrade
             </button>
           )}
-          <button className="logout-btn" onClick={handleLogout}>
+
+          {/* ✅ open modal instead of logging out instantly */}
+          <button
+            className="logout-btn"
+            type="button"
+            onClick={() => setShowLogoutModal(true)}
+          >
             <LogOut size={22} className="nav-icon" />
             {isOpen && <span className="nav-label">Logout</span>}
           </button>
         </div>
       </aside>
+
+      {/* ✅ LOGOUT MODAL */}
+      {showLogoutModal && (
+        <div className="modal-overlay" role="dialog" aria-modal="true">
+          <div className="modal-card" ref={modalRef}>
+            <div className="modal-top">
+              <h3 className="modal-title">Log out?</h3>
+              <button
+                className="modal-close"
+                type="button"
+                onClick={() => setShowLogoutModal(false)}
+                aria-label="Close"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <p className="modal-text">
+              Are you sure you want to log out of the admin dashboard?
+            </p>
+
+            <div className="modal-actions">
+              <button
+                type="button"
+                className="modal-btn ghost"
+                onClick={() => setShowLogoutModal(false)}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className="modal-btn primary"
+                onClick={handleLogout}
+              >
+                Yes, log out
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
