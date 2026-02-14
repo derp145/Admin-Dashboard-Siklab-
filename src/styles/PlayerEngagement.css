@@ -1,10 +1,11 @@
 .dashboard-container {
   background: #0f0f2a;
-  padding: 40px;
+  padding: 20px;
   font-family: "Inter", sans-serif;
   color: #e0e7ff;
 }
 
+/* HEADER */
 .dashboard-header h1 {
   font-size: 28px;
   color: #8b5cf6;
@@ -15,82 +16,168 @@
   margin-top: 4px;
 }
 
-.stats-grid .stat-card {
-  background: #1a1a3a;
-  color: #e0e7ff;
+/* KPI GRID */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin: 14px 0 18px;
 }
 
-.stats-grid .stat-card:hover {
+.stat-card {
+  background: #1a1a3a;
+  padding: 18px;
+  border-radius: 14px;
+  transition: 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
   background: #2c2c5a;
 }
 
 .stat-label {
   color: #a5b4fc;
+  font-size: 13px;
 }
 
 .stat-value {
-  color: #fbbf24; /* Important stat numbers */
+  margin: 10px 0 6px;
+  color: #fbbf24;
 }
 
 .stat-trend {
   color: #3b82f6;
+  font-size: 13px;
 }
 
+/* GRID */
 .dashboard-top-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 30px;
-  margin-bottom: 40px;
+  gap: 14px;
+  margin-bottom: 18px;
 }
 
-.chart-section h3,
-.table-section h3 {
-  color: #8b5cf6;
+@media (max-width: 950px) {
+  .dashboard-top-grid {
+    grid-template-columns: 1fr;
+  }
 }
+
+.chart-section,
+.table-section {
+  background: #1a1a3a;
+  padding: 16px;
+  border-radius: 14px;
+}
+
+/* ===============================
+   BAR CHART (FULL HEIGHT)
+================================= */
 
 .bar-chart {
   display: flex;
   align-items: flex-end;
-  gap: 12px;
-  height: 200px;
-  background: #1a1a3a;
-  padding: 12px;
-  border-radius: 10px;
+  gap: 18px;
+
+  height: 220px;
+  padding: 20px 16px 24px;
+
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .bar-container {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 24px;
+  justify-content: flex-end;
+  height: 100%;
+  gap: 10px;
 }
 
 .bar {
   width: 100%;
+  max-width: 36px;
+
   background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+  border-radius: 10px 10px 0 0;
+
   position: relative;
-  border-radius: 6px 6px 0 0;
+  transition: 0.2s ease;
+}
+
+.bar:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.1);
 }
 
 .bar-tooltip {
   position: absolute;
-  top: -24px;
-  font-size: 10px;
-  color: #fbbf24; /* Emphasize values */
+  top: -28px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  padding: 4px 8px;
+  font-size: 11px;
+  border-radius: 8px;
+
+  background: rgba(10, 10, 20, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #fbbf24;
+
+  opacity: 0;
+  transition: 0.15s ease;
+}
+
+.bar:hover .bar-tooltip {
+  opacity: 1;
 }
 
 .bar-label {
-  margin-top: 6px;
+  font-size: 12px;
+  color: #a5b4fc;
+  white-space: nowrap;
+}
+
+/* ===============================
+   PROGRESS BAR
+================================= */
+
+.progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.progress-bg {
+  width: 160px;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+  border-radius: 999px;
+  transition: width 0.25s ease;
+}
+
+.progress-text {
   font-size: 12px;
   color: #a5b4fc;
 }
 
+/* TABLES */
 .engagement-table,
 .players-table {
   width: 100%;
   border-collapse: collapse;
-  background: #1a1a3a;
-  color: #e0e7ff;
 }
 
 .engagement-table th,
@@ -98,22 +185,16 @@
   color: #a5b4fc;
   text-align: left;
   padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .engagement-table td,
 .players-table td {
-  padding: 12px;
-  border-top: 1px solid #334155;
-  color: #e0e7ff;
+  padding: 12px 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.progress-bg {
-  background: #0f0f2a;
-  border-radius: 6px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  background: linear-gradient(135deg, #8b5cf6, #3b82f6);
-  height: 100%;
+/* Responsive table */
+.table-scroll {
+  overflow-x: auto;
 }

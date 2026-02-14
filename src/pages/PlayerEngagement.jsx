@@ -1,19 +1,17 @@
-import React from 'react';
-import '../styles/PlayerEngagement.css';
-import { 
-  DASHBOARD_KPI, 
-  WEEKLY_PLAYTIME, 
-  REGIONAL_COMPLETION, 
-  TOP_PLAYERS 
+import React from "react";
+import "../styles/PlayerEngagement.css";
+import {
+  DASHBOARD_KPI,
+  WEEKLY_PLAYTIME,
+  REGIONAL_COMPLETION,
+  TOP_PLAYERS,
 } from "../common/MockData";
 
 const PlayerEngagement = () => {
-  // Dynamically find the maximum hours to scale the bars
-  const maxHours = Math.max(...WEEKLY_PLAYTIME.map(d => d.hours));
+  const maxHours = Math.max(...WEEKLY_PLAYTIME.map((d) => d.hours), 1);
 
   return (
     <div className="dashboard-container">
-
       {/* HEADER */}
       <header className="dashboard-header">
         <div className="header-text">
@@ -33,22 +31,25 @@ const PlayerEngagement = () => {
         ))}
       </section>
 
-      {/* TOP GRID: Weekly Playtime + Regional Completion */}
+      {/* TOP GRID */}
       <div className="dashboard-top-grid">
-
-        {/* Weekly Community Playtime (Bar Chart) */}
+        {/* Weekly Playtime */}
         <section className="chart-section">
           <h3>Weekly Community Playtime (Hours)</h3>
+
           <div className="bar-chart">
             {WEEKLY_PLAYTIME.map((data, index) => {
-              const barHeight = (data.hours / maxHours) * 100; // dynamic height
+              const barHeight = (data.hours / maxHours) * 100;
+
               return (
                 <div key={index} className="bar-container">
-                  <div 
-                    className="bar" 
+                  <div
+                    className="bar"
                     style={{ height: `${barHeight}%` }}
                   >
-                    <span className="bar-tooltip">{data.hours} hrs</span>
+                    <span className="bar-tooltip">
+                      {data.hours} hrs
+                    </span>
                   </div>
                   <span className="bar-label">{data.week}</span>
                 </div>
@@ -57,9 +58,10 @@ const PlayerEngagement = () => {
           </div>
         </section>
 
-        {/* Regional Completion Rates Table */}
+        {/* Regional Completion */}
         <section className="table-section">
           <h3>Regional Completion Rates</h3>
+
           <table className="engagement-table">
             <thead>
               <tr>
@@ -74,8 +76,16 @@ const PlayerEngagement = () => {
                   <td>{item.region}</td>
                   <td>{item.active}</td>
                   <td>
-                    <div className="progress-bg">
-                      <div className="progress-fill" style={{ width: `${item.progress}%` }}></div>
+                    <div className="progress-wrap">
+                      <div className="progress-bg">
+                        <div
+                          className="progress-fill"
+                          style={{ width: `${item.progress}%` }}
+                        />
+                      </div>
+                      <span className="progress-text">
+                        {item.progress}%
+                      </span>
                     </div>
                   </td>
                 </tr>
@@ -83,38 +93,39 @@ const PlayerEngagement = () => {
             </tbody>
           </table>
         </section>
-
       </div>
 
-      {/* Top Players Table (Full Width) */}
+      {/* Top Players */}
       <section className="table-section top-players-section">
         <h3>Top Players Engagement</h3>
-        <table className="players-table">
-          <thead>
-            <tr>
-              <th>User ID</th>
-              <th>Player Name</th>
-              <th>Total Hours</th>
-              <th>1-Day Retention</th>
-              <th>7-Day Retention</th>
-              <th>Avg. Session (min)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {TOP_PLAYERS.map((player, index) => (
-              <tr key={player.userId}>
-                <td>{index + 1}</td>
-                <td>{player.playerName}</td>
-                <td>{player.hours}</td>
-                <td>{player.retention1}%</td>
-                <td>{player.retention7}%</td>
-                <td>{player.avgSession}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </section>
 
+        <div className="table-scroll">
+          <table className="players-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Player Name</th>
+                <th>Total Hours</th>
+                <th>1-Day Retention</th>
+                <th>7-Day Retention</th>
+                <th>Avg. Session (min)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {TOP_PLAYERS.map((player, index) => (
+                <tr key={player.userId}>
+                  <td>{index + 1}</td>
+                  <td>{player.playerName}</td>
+                  <td>{player.hours}</td>
+                  <td>{player.retention1}%</td>
+                  <td>{player.retention7}%</td>
+                  <td>{player.avgSession}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
     </div>
   );
 };

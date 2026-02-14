@@ -5,7 +5,7 @@ import {
   INSTALL_CHART_DATA,
   STORE_DISTRIBUTION,
   PLATFORM_DETAILS,
-} from "../common/MockData";
+} from "../common/MockData"; 
 
 export default function PlatformStats() {
   const maxInstallValue = Math.max(
