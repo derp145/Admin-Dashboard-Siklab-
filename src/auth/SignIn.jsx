@@ -1,32 +1,48 @@
+// SignIn.jsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 import "./Auth.css";
 
 export default function SignIn() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+
+  // Forgot password modal state
+  const [showForgotModal, setShowForgotModal] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [modalError, setModalError] = useState("");
+  const [modalSuccess, setModalSuccess] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
-
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) setError(error.message);
       else navigate("/dashboard");
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const sendResetLink = async () => {
+    if (!forgotEmail.includes("@")) return setModalError("Enter a valid email");
+    setModalError("");
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail, {
+        redirectTo: window.location.origin + "/auth/new-password", // points to NewPass page
+      });
+      if (error) setModalError(error.message);
+      else setModalSuccess(true);
+    } catch {
+      setModalError("Something went wrong. Try again.");
     }
   };
 
@@ -69,11 +85,12 @@ export default function SignIn() {
             </button>
           </form>
 
-          <p style={{ marginTop: "12px" }}>
-            <Link to="/auth/forgot-password" className="link-btn">
+          <div style={{ marginTop: "12px", fontSize: "12px", color: "#cbd5e1" }}>
+            <button className="link-btn" onClick={() => setShowForgotModal(true)}>
               Forgot Password?
-            </Link>
-          </p>
+            </button>
+            <div>We’ll send a reset link to your email.</div>
+          </div>
 
           <p style={{ marginTop: "24px" }}>
             Don’t have an account?{" "}
@@ -82,6 +99,43 @@ export default function SignIn() {
             </Link>
           </p>
         </div>
+
+        {/* Forgot password modal */}
+        {showForgotModal && (
+          <div className="modal-overlay-small">
+            <div className="modal-glass-small">
+              <h3>Reset Password</h3>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={forgotEmail}
+                onChange={(e) => setForgotEmail(e.target.value)}
+              />
+              {modalError && <p style={{ color: "red" }}>{modalError}</p>}
+              {modalSuccess && (
+                <p style={{ color: "#fbbf59" }}>
+                  Check your email! Click the link to set your new password.
+                </p>
+              )}
+              {!modalSuccess && (
+                <button className="primary-btn full-width" onClick={sendResetLink}>
+                  Send Reset Link
+                </button>
+              )}
+              <button
+                className="link-btn full-width"
+                onClick={() => {
+                  setShowForgotModal(false);
+                  setForgotEmail("");
+                  setModalError("");
+                  setModalSuccess(false);
+                }}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

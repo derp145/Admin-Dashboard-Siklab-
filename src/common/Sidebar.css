@@ -117,53 +117,44 @@
   color: #c084fc;
 }
 
+/* Add some space between nav items and logout button */
 .sidebar-bottom {
-  margin-top: auto;
+  margin-top: 25px; /* ↑ increase gap from last nav item */
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-.upgrade-btn {
-  padding: 12px;
-  background: linear-gradient(135deg, #8b5cf6, #3b82f6);
-  border: none;
-  border-radius: 10px;
-  color: white;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.sidebar-bottom::before {
+  content: "";
+  display: block;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin-bottom: 15px; /* space between line and logout button */
 }
 
-.upgrade-btn:hover {
-  background: linear-gradient(135deg, #c084fc, #22d3ee);
-  box-shadow: 0 4px 12px rgba(192, 132, 252, 0.3);
-}
 
 .logout-btn {
-  padding: 12px;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  color: rgba(255, 255, 255, 0.8);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  justify-content: center;
+  padding: 10px 14px;
+  display: flex;              /* 👈 makes icon + text align nicely */
+  align-items: center;        /* 👈 vertical alignment */
+  gap: 10px;                  /* 👈 space between icon + text */
+  background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+  border: none;
+  border-radius: 15px;
+  color: white;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  width: 100%;
+  justify-content: center;
 }
 
 .logout-btn:hover {
-  background: linear-gradient(
-    90deg,
-    rgba(192, 132, 252, 0.2),
-    rgba(34, 211, 238, 0.2)
-  );
-  color: #c084fc;
+  color: #000000;
   border-color: #c084fc;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(192, 132, 252, 0.3);
+  background: linear-gradient(135deg, #c084fc, #22d3ee);
   box-shadow: 0 4px 12px rgba(192, 132, 252, 0.3);
 }
 

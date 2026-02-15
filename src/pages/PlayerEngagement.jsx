@@ -3,9 +3,10 @@ import "../styles/PlayerEngagement.css";
 import {
   DASHBOARD_KPI,
   WEEKLY_PLAYTIME,
-  REGIONAL_COMPLETION,
+  DAILY_ACTIVE_USERS,
   TOP_PLAYERS,
 } from "../common/MockData";
+
 
 const PlayerEngagement = () => {
   const maxHours = Math.max(...WEEKLY_PLAYTIME.map((d) => d.hours), 1);
@@ -34,66 +35,99 @@ const PlayerEngagement = () => {
       {/* TOP GRID */}
       <div className="dashboard-top-grid">
         {/* Weekly Playtime */}
-        <section className="chart-section">
-          <h3>Weekly Community Playtime (Hours)</h3>
+        {/* Weekly Playtime (Landscape) */}
+<section className="chart-section">
+  <h3>Weekly Community Playtime (Hours)</h3>
 
-          <div className="bar-chart">
-            {WEEKLY_PLAYTIME.map((data, index) => {
-              const barHeight = (data.hours / maxHours) * 100;
+  <div className="horizontal-chart">
+    {WEEKLY_PLAYTIME.map((data, index) => {
+      const barWidth = (data.hours / maxHours) * 100;
 
-              return (
-                <div key={index} className="bar-container">
-                  <div
-                    className="bar"
-                    style={{ height: `${barHeight}%` }}
-                  >
-                    <span className="bar-tooltip">
-                      {data.hours} hrs
-                    </span>
-                  </div>
-                  <span className="bar-label">{data.week}</span>
-                </div>
-              );
-            })}
+      return (
+        <div key={index} className="horizontal-row">
+          <span className="horizontal-label">{data.week}</span>
+
+          <div className="horizontal-bar-bg">
+            <div
+              className="horizontal-bar-fill"
+              style={{ width: `${barWidth}%` }}
+            />
           </div>
-        </section>
 
-        {/* Regional Completion */}
-        <section className="table-section">
-          <h3>Regional Completion Rates</h3>
+          <span className="horizontal-value">
+            {data.hours} hrs
+          </span>
+        </div>
+      );
+    })}
+  </div>
+</section>
 
-          <table className="engagement-table">
-            <thead>
-              <tr>
-                <th>Region</th>
-                <th>Users</th>
-                <th>Progress</th>
-              </tr>
-            </thead>
-            <tbody>
-              {REGIONAL_COMPLETION.map((item) => (
-                <tr key={item.id}>
-                  <td>{item.region}</td>
-                  <td>{item.active}</td>
-                  <td>
-                    <div className="progress-wrap">
-                      <div className="progress-bg">
-                        <div
-                          className="progress-fill"
-                          style={{ width: `${item.progress}%` }}
-                        />
-                      </div>
-                      <span className="progress-text">
-                        {item.progress}%
-                      </span>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
       </div>
+{/* Daily Active Users */}
+{/* Daily Active Users */}
+<section className="chart-section">
+  <h3>Daily Active Users</h3>
+
+  <div className="line-chart">
+    <svg viewBox="0 0 600 200" preserveAspectRatio="none">
+      {(() => {
+        const maxUsers = Math.max(
+          ...DAILY_ACTIVE_USERS.map((d) => d.users),
+          1
+        );
+
+        const points = DAILY_ACTIVE_USERS.map((d, i) => {
+          const x =
+            (i / (DAILY_ACTIVE_USERS.length - 1)) * 600;
+          const y =
+            200 - (d.users / maxUsers) * 160;
+          return { x, y, value: d.users };
+        });
+
+        return (
+          <>
+            {/* Line */}
+            <polyline
+              fill="none"
+              stroke="#8b5cf6"
+              strokeWidth="3"
+              points={points.map(p => `${p.x},${p.y}`).join(" ")}
+            />
+
+            {/* Circles + Numbers */}
+            {points.map((p, i) => (
+              <g key={i}>
+                <circle
+                  cx={p.x}
+                  cy={p.y}
+                  r="4"
+                  fill="#3b82f6"
+                />
+                <text
+                  x={p.x}
+                  y={p.y - 10}
+                  textAnchor="middle"
+                  fontSize="10"
+                  fill="#fbbf24"
+                >
+                  {p.value}
+                </text>
+              </g>
+            ))}
+          </>
+        );
+      })()}
+    </svg>
+
+    <div className="line-labels">
+      {DAILY_ACTIVE_USERS.map((d, i) => (
+        <span key={i}>{d.day}</span>
+      ))}
+    </div>
+  </div>
+</section>
+
 
       {/* Top Players */}
       <section className="table-section top-players-section">

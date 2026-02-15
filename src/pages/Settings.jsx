@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useNavigate } from "react-router-dom";
 import "../styles/Settings.css";
 
 /* ---------- Custom Glass Dropdown (Portal + scroll-safe) ---------- */
@@ -114,14 +115,10 @@ function GlassSelect({ value, options, onChange, placeholder = "Select..." }) {
 }
 
 export default function Settings() {
+  const navigate = useNavigate();
+
   const initial = useMemo(
     () => ({
-      profile: {
-        displayName: "Admin",
-        email: "admin@siklab.com",
-        role: "Administrator",
-        timezone: "Asia/Manila",
-      },
       security: {
         twoFA: false,
         sessionTimeout: 30,
@@ -199,7 +196,7 @@ export default function Settings() {
     });
   };
 
-  // update active sidebar item while scrolling
+  // update active sidebar item while scrolling (fix bottom highlighting)
   useEffect(() => {
     const el = contentRef.current;
     if (!el) return;
@@ -214,12 +211,20 @@ export default function Settings() {
       keys.forEach((k) => {
         const node = sectionRefs.current[k];
         if (!node) return;
+
         const dist = Math.abs(node.getBoundingClientRect().top - containerTop - 10);
         if (dist < bestDist) {
           bestDist = dist;
           bestKey = k;
         }
       });
+
+      // If at bottom, always highlight last section
+      if (
+        el.scrollHeight - el.scrollTop - el.clientHeight < 20
+      ) {
+        bestKey = "system";
+      }
 
       setActive(bestKey);
     };
@@ -228,9 +233,29 @@ export default function Settings() {
     return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Load user profile for read-only profile section
+  const [user, setUser] = useState({
+    displayName: "",
+    fullName: "",
+    email: "",
+    role: "",
+  });
+
+  useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("userProfile"));
+    if (storedUser) {
+      setUser({
+        displayName: storedUser.displayName,
+        fullName: storedUser.fullName,
+        email: storedUser.email,
+        role: storedUser.role,
+      });
+    }
+  }, []);
+
   return (
     <div className="dashboard-container settings-page">
-      {/* Top bar stays */}
+      {/* Top bar */}
       <div className="settings-top">
         <div className="settings-title">
           <h1 className="settings-h1">Settings</h1>
@@ -262,100 +287,87 @@ export default function Settings() {
         </div>
       </div>
 
-      {/* NEW: Settings layout with inner sidebar + scrollable content */}
+      {/* Settings layout */}
       <div className="settings-layout">
         <aside className="settings-side">
           <div className="settings-side-card">
-            <button
-              type="button"
-              className={`settings-side-item ${active === "profile" ? "active" : ""}`}
-              onClick={() => scrollToSection("profile")}
-            >
-              Profile
-            </button>
-
-            <button
-              type="button"
-              className={`settings-side-item ${active === "security" ? "active" : ""}`}
-              onClick={() => scrollToSection("security")}
-            >
-              Security
-            </button>
-
-            <button
-              type="button"
-              className={`settings-side-item ${active === "notifications" ? "active" : ""}`}
-              onClick={() => scrollToSection("notifications")}
-            >
-              Notifications
-            </button>
-
-            <button
-              type="button"
-              className={`settings-side-item ${active === "appearance" ? "active" : ""}`}
-              onClick={() => scrollToSection("appearance")}
-            >
-              Appearance
-            </button>
-
-            <button
-              type="button"
-              className={`settings-side-item ${active === "system" ? "active" : ""}`}
-              onClick={() => scrollToSection("system")}
-            >
-              System
-            </button>
+            {["profile", "security", "notifications", "appearance", "system"].map(
+              (key) => (
+                <button
+                  key={key}
+                  type="button"
+                  className={`settings-side-item ${active === key ? "active" : ""}`}
+                  onClick={() => scrollToSection(key)}
+                >
+                  {key.charAt(0).toUpperCase() + key.slice(1)}
+                </button>
+              )
+            )}
           </div>
         </aside>
 
         <main className="settings-content" ref={contentRef}>
-          <div
-            ref={(n) => (sectionRefs.current.profile = n)}
-            className="settings-section"
-          >
-            <Card title="Profile" desc="Basic admin account information.">
-              <Row label="Display name">
-                <input
-                  className="settings-input"
-                  value={data.profile.displayName}
-                  onChange={(e) =>
-                    update("profile", "displayName", e.target.value)
-                  }
-                  placeholder="e.g., Xandra"
-                />
-              </Row>
 
-              <Row label="Email (read-only)">
-                <input
-                  className="settings-input settings-input-readonly"
-                  value={data.profile.email}
-                  readOnly
-                />
-              </Row>
+          {/* ------------------ PROFILE (Read-only) ------------------ */}
+<div
+  ref={(n) => (sectionRefs.current.profile = n)}
+  className="settings-section"
+>
+  <Card title="Profile (Read Only)" desc="Your admin account information.">
+    <Row label="Display name">
+      <input
+        className="settings-input settings-input-readonly read-only-cursor read-only-hover"
+        value={user.displayName || ""}
+        readOnly
+        title="This field is read-only. Edit in Profile page."
+      />
+    </Row>
 
-              <Row label="Role (read-only)">
-                <input
-                  className="settings-input settings-input-readonly"
-                  value={data.profile.role}
-                  readOnly
-                />
-              </Row>
+    <Row label="Full name">
+      <input
+        className="settings-input settings-input-readonly read-only-cursor read-only-hover"
+        value={user.fullName || ""}
+        readOnly
+        title="This field is read-only. Edit in Profile page."
+      />
+    </Row>
 
-              <Row label="Timezone">
-                <GlassSelect
-                  value={data.profile.timezone}
-                  onChange={(v) => update("profile", "timezone", v)}
-                  options={[
-                    { value: "Asia/Manila", label: "Asia/Manila" },
-                    { value: "Asia/Singapore", label: "Asia/Singapore" },
-                    { value: "Asia/Tokyo", label: "Asia/Tokyo" },
-                    { value: "UTC", label: "UTC" },
-                  ]}
-                />
-              </Row>
-            </Card>
-          </div>
+    <Row label="Email">
+      <input
+        className="settings-input settings-input-readonly read-only-cursor read-only-hover"
+        value={user.email || ""}
+        readOnly
+        title="This field is read-only. Edit in Profile page."
+      />
+    </Row>
 
+    <Row label="Role">
+      <input
+        className="settings-input settings-input-readonly read-only-cursor read-only-hover"
+        value="Administrator"
+        readOnly
+        title="Role is fixed as Administrator"
+      />
+    </Row>
+
+    {/* ---------------- EDIT BUTTON ---------------- */}
+    <div style={{ marginTop: "12px" }}>
+     <button
+  className="settings-btn-edit-profile"
+  onClick={() => navigate("/dashboard/profile")}
+>
+  Edit Profile Here
+</button>
+
+    </div>
+  </Card>
+</div>
+
+
+
+
+
+          {/* ------------------ SECURITY ------------------ */}
           <div
             ref={(n) => (sectionRefs.current.security = n)}
             className="settings-section"
@@ -390,6 +402,7 @@ export default function Settings() {
             </Card>
           </div>
 
+          {/* ------------------ NOTIFICATIONS ------------------ */}
           <div
             ref={(n) => (sectionRefs.current.notifications = n)}
             className="settings-section"
@@ -422,6 +435,7 @@ export default function Settings() {
             </Card>
           </div>
 
+          {/* ------------------ APPEARANCE ------------------ */}
           <div
             ref={(n) => (sectionRefs.current.appearance = n)}
             className="settings-section"
@@ -455,6 +469,7 @@ export default function Settings() {
             </Card>
           </div>
 
+          {/* ------------------ SYSTEM ------------------ */}
           <div
             ref={(n) => (sectionRefs.current.system = n)}
             className="settings-section"
@@ -494,7 +509,6 @@ export default function Settings() {
 }
 
 /* ------- UI helpers ------- */
-
 function Card({ title, desc, children }) {
   return (
     <div className="settings-card">

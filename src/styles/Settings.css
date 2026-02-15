@@ -71,6 +71,106 @@
 }
 
 /* ===============================
+   EDIT PROFILE BUTTON
+================================= */
+.settings-btn-edit-profile {
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease, box-shadow 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(6px);
+}
+
+/* Hover effect */
+.settings-btn-edit-profile:hover {
+  background: rgba(139, 92, 246, 0.18); /* soft purple-blue gradient feel */
+  border-color: rgba(192, 132, 252, 0.35);
+  box-shadow: 0 0 12px rgba(192, 132, 252, 0.35);
+  transform: translateY(-1px);
+}
+
+/* Active/click effect */
+.settings-btn-edit-profile:active {
+  transform: translateY(0);
+  box-shadow: 0 0 8px rgba(192, 132, 252, 0.25);
+}
+
+/* Disabled style (if ever needed) */
+.settings-btn-edit-profile:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+
+/* ===============================
+   READ-ONLY HOVER INDICATOR
+================================= */
+.read-only-cursor {
+  cursor: not-allowed;
+}
+
+.read-only-hover {
+  position: relative;
+}
+
+.read-only-hover::after {
+  content: "🚫 Read-only";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  opacity: 0;
+  transition: 0.2s ease;
+  color: #f87171; /* soft red */
+  pointer-events: none;
+}
+
+.read-only-hover:hover::after {
+  opacity: 1;
+}
+
+/* ===============================
+   EDIT PROFILE BUTTON
+================================= */
+.settings-btn-edit-profile {
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(6px);
+}
+
+/* Hover glow effect */
+.settings-btn-edit-profile:hover {
+  background: rgba(139, 92, 246, 0.18);
+  border-color: rgba(192, 132, 252, 0.35);
+  box-shadow: 0 0 12px rgba(192, 132, 252, 0.35);
+  transform: translateY(-1px);
+}
+
+/* Active click effect */
+.settings-btn-edit-profile:active {
+  transform: translateY(0);
+  box-shadow: 0 0 8px rgba(192, 132, 252, 0.25);
+}
+
+/* ===============================
    NEW: LAYOUT (INNER SIDEBAR + SCROLL CONTENT)
 ================================= */
 .settings-layout {
@@ -361,3 +461,24 @@
   background: rgba(255, 255, 255, 0.12);
 }
 
+/* ===============================
+   READ-ONLY INPUTS WITH ICON
+================================= */
+.read-only-cursor {
+  cursor: not-allowed !important;
+  opacity: 0.85; /* slightly dim */
+  position: relative;
+}
+
+/* add stop / no-entry icon on hover */
+.read-only-hover:hover::after {
+  content: "🚫"; /* you can replace with another symbol if you like */
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  opacity: 0.8;
+  pointer-events: none; /* so it doesn't block cursor */
+  transition: opacity 0.2s ease;
+}

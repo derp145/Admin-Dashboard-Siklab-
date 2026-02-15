@@ -3,16 +3,21 @@
   padding: 40px;
   font-family: "Inter", sans-serif;
   color: #e0e7ff;
+  min-height: 100vh;
 }
 
 .dashboard-header h1 {
   color: #8b5cf6;
+  font-size: 28px;
+  margin-bottom: 24px;
 }
 
-/* KPI GRID */
+/* =========================
+   KPI GRID
+========================= */
 .kpi-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 20px;
   margin-bottom: 40px;
 }
@@ -22,14 +27,34 @@
   padding: 20px;
   border-radius: 14px;
   color: #e0e7ff;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+  transition: transform 0.2s ease;
 }
 
-.kpi-title { color: #a5b4fc; }
-.kpi-value { font-weight: 600; }
-.kpi-trend { color: #8b5cf6; }
+.kpi-card:hover {
+  transform: translateY(-4px);
+}
 
-/* CHART GRID */
+.kpi-title {
+  color: #a5b4fc;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.kpi-value {
+  font-weight: 700;
+  font-size: 22px;
+}
+
+.kpi-trend {
+  color: #8b5cf6;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+/* =========================
+   CHART GRID
+========================= */
 .charts-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -40,29 +65,36 @@
 .card {
   background: #1a1a3a;
   padding: 20px;
-  border-radius: 12px;
+  border-radius: 16px;
   color: #e0e7ff;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  overflow: hidden;
 }
 
-/* ===============================
-   ✅ PLATFORM STATS CHART (NAMESPACED)
-================================= */
+.card h2 {
+  font-size: 18px;
+  margin-bottom: 14px;
+}
 
+/* =========================
+   BAR CHART
+========================= */
 .ps-bar-chart-frame {
   margin-top: 12px;
-  padding: 18px;
+  padding: 16px;
   border-radius: 16px;
   background: rgba(0,0,0,0.18);
   border: 1px solid rgba(255,255,255,0.08);
+  overflow-x: auto;
 }
 
 .ps-bar-chart {
-  height: 260px;
+  min-width: 520px; /* Enables horizontal scroll on small screens */
+  height: 240px;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 10px;
-
   padding: 14px;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,0.06);
@@ -71,7 +103,7 @@
 
 .ps-bar-group {
   flex: 1;
-  min-width: 30px;
+  min-width: 28px;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -86,12 +118,11 @@
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .ps-bar {
   width: 14px;
-  display: block;
   border-radius: 12px 12px 0 0;
   transition: height 0.35s ease;
   box-shadow: 0 8px 18px rgba(0,0,0,0.25);
@@ -111,12 +142,12 @@
   text-align: center;
 }
 
-/* legend */
+/* Legend */
 .ps-legend {
   margin-top: 14px;
   display: flex;
-  align-items: center;
-  gap: 18px;
+  flex-wrap: wrap;
+  gap: 16px;
   color: #a5b4fc;
   font-size: 13px;
 }
@@ -129,7 +160,6 @@
   margin-right: 6px;
 }
 
-/* make dots match bars */
 .ps-dot.ps-installs {
   background: #a78bfa;
 }
@@ -138,19 +168,25 @@
   background: #ef4444;
 }
 
-/* STORE LIST */
+/* =========================
+   STORE DISTRIBUTION
+========================= */
 .store-row {
   display: flex;
   gap: 12px;
   align-items: center;
   background: #0f0f2a;
   border: 1px solid #334155;
-  border-radius: 10px;
-  padding: 10px 12px;
-  margin-bottom: 10px;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
 }
 
-.store-name { width: 120px; color: #a5b4fc; }
+.store-name {
+  width: 120px;
+  color: #a5b4fc;
+  font-size: 14px;
+}
 
 .store-bar-wrapper {
   flex: 1;
@@ -166,31 +202,94 @@
   transition: width 0.5s ease;
 }
 
-.store-value { width: 50px; text-align: right; color: #e0e7ff; }
+.store-value {
+  width: 50px;
+  text-align: right;
+  font-size: 14px;
+}
 
-/* TABLE */
+/* =========================
+   TABLE
+========================= */
 .platform-table {
   width: 100%;
   border-collapse: collapse;
   background: #1a1a3a;
   margin-top: 10px;
+  min-width: 500px;
 }
 
 .platform-table th {
   color: #a5b4fc;
   text-align: left;
-  padding: 10px;
+  padding: 12px;
+  font-size: 14px;
 }
 
 .platform-table td {
-  padding: 12px;
+  padding: 14px 12px;
   border-top: 1px solid #334155;
-  color: #e0e7ff;
+  font-size: 14px;
 }
 
-@media (max-width: 900px) {
-  .charts-grid { grid-template-columns: 1fr; }
-  .platform-stats { padding: 20px; }
-  .ps-bar { width: 10px; }
-  .ps-bar-group { min-width: 24px; }
+.platform-table-wrapper {
+  overflow-x: auto;
+}
+
+/* =========================
+   RESPONSIVE BREAKPOINTS
+========================= */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .platform-stats {
+    padding: 30px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .platform-stats {
+    padding: 20px 16px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 22px;
+  }
+
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kpi-card {
+    padding: 16px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .store-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .store-name,
+  .store-value {
+    width: 100%;
+    text-align: left;
+  }
+
+  .ps-bar {
+    width: 10px;
+  }
+
+  .ps-bar-chart {
+    height: 200px;
+  }
 }

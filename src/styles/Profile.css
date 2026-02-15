@@ -1,46 +1,67 @@
 .profile-page {
-  min-height: 100vh;
+  min-height: 130vh;
   background: radial-gradient(circle at top right, #17052e, #060621);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
+  padding:1px;
   color: white;
 }
 
 .back-btn {
   align-self: flex-start;
-  background: #1d1f2a;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 10px;
-  color: white;
+  padding: 8px 16px;
+  border-radius: 12px;
+
+  background: rgba(29,155,240,0.1);
+  border: 1px solid #1d9bf0;
+
+  color: #1d9bf0;
+  font-weight: 500;
+
   cursor: pointer;
+  margin-bottom: 18px;
+
+  transition: all 0.25s ease;
 }
 
+.back-btn:hover {
+  background: rgba(29,155,240,0.2);
+  transform: translateY(-2px);
+}
+
+/* =========================
+   CARD
+========================= */
 .profile-card {
-  width: 720px;
-  border-radius: 15px;
+  width: 100%;
+  max-width: 720px;
+  border-radius: 16px;
   background: rgba(15, 23, 42, 0.85);
   overflow: hidden;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
 
+/* =========================
+   BANNER
+========================= */
 .banner-wrapper {
   position: relative;
-  height: 120px;
+  height: 140px;
   background: rgba(255,255,255,0.05);
 }
 
 .banner-img {
   width: 100%;
-  height: 120px;
+  height: 140px;
   object-fit: cover;
 }
 
 .change-banner-bottom-btn {
   position: absolute;
   right: 16px;
-  bottom: -14px;
+  bottom: 12px;
   background: rgba(0,0,0,0.6);
   padding: 6px 12px;
   border-radius: 8px;
@@ -48,11 +69,15 @@
   cursor: pointer;
 }
 
+/* =========================
+   HEADER
+========================= */
 .profile-header {
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 20px;
+  padding: 24px;
+  flex-wrap: wrap;
 }
 
 .avatar-wrapper {
@@ -63,14 +88,14 @@
 }
 
 .avatar-large {
-  width: 90px;
-  height: 90px;
+  width: 96px;
+  height: 96px;
   border-radius: 50%;
   background: #2a2c3d;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 28px;
+  font-size: 30px;
 }
 
 .change-avatar-btn {
@@ -85,28 +110,38 @@
 
 .name-email h2 {
   margin: 0;
+  font-size: 22px;
 }
 
 .name-email p {
   margin: 4px 0 0;
   color: #9ca3af;
+  font-size: 14px;
+  word-break: break-word;
 }
 
+/* =========================
+   INFO SECTION
+========================= */
 .info-section {
-  padding: 20px;
+  padding: 24px;
 }
 
 .section-title {
   font-size: 14px;
   color: #7aa2ff;
   margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
+/* Desktop Layout */
 .form-row {
   display: grid;
   grid-template-columns: 180px 1fr;
   align-items: center;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
+  gap: 12px;
 }
 
 .form-row label {
@@ -116,12 +151,14 @@
 
 .form-row input,
 .form-row select {
-  max-width: 360px;
-  padding: 8px 12px;
-  border-radius: 10px;
+  width: 100%;
+  max-width: 420px;
+  padding: 10px 14px;
+  border-radius: 12px;
   border: 1px solid rgba(255,255,255,0.1);
   background: rgba(255,255,255,0.05);
   color: white;
+  font-size: 14px;
 }
 
 .form-row input:disabled {
@@ -132,8 +169,12 @@
 .inline-field {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
+/* =========================
+   BUTTONS
+========================= */
 .btn-style {
   padding: 6px 12px;
   border-radius: 8px;
@@ -141,25 +182,31 @@
   border: 1px solid #1d9bf0;
   color: #1d9bf0;
   cursor: pointer;
+  font-size: 13px;
 }
 
 .primary-btn {
   background-color: #1d9bf0;
   border: none;
   color: white;
-  padding: 8px 18px;
+  padding: 10px 20px;
   border-radius: 20px;
   cursor: pointer;
+  font-size: 14px;
 }
 
 .edit-button-bottom {
   display: flex;
   justify-content: flex-end;
-  gap: 10px;
-  padding: 16px;
+  gap: 12px;
+  padding: 20px;
   border-top: 1px solid rgba(255,255,255,0.05);
+  flex-wrap: wrap;
 }
 
+/* =========================
+   POPUPS
+========================= */
 .popup-overlay {
   position: fixed;
   inset: 0;
@@ -171,11 +218,11 @@
 
 .popup-content {
   background: #111827;
-  padding: 20px;
-  border-radius: 12px;
+  padding: 24px;
+  border-radius: 14px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .saved-popup {
@@ -186,8 +233,9 @@
   border-radius: 8px;
 }
 
-/* ForgotPass Modal Style */
-
+/* =========================
+   MODALS
+========================= */
 .modal-overlay-small {
   position: fixed;
   inset: 0;
@@ -197,14 +245,15 @@
   align-items: center;
   justify-content: center;
   z-index: 10;
+  padding: 20px;
 }
 
 .modal-glass-small {
   background: rgba(30,41,59,0.95);
   border: 1px solid #4b5563;
   border-radius: 20px;
-  padding: 32px 28px;
-  width: 90%;
+  padding: 28px;
+  width: 100%;
   max-width: 420px;
   text-align: center;
   box-shadow: 0 25px 50px rgba(0,0,0,0.4);
@@ -217,8 +266,73 @@
   display: flex;
   justify-content: center;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 .full-width {
   width: 100%;
+}
+
+/* =========================
+   RESPONSIVE BREAKPOINTS
+========================= */
+
+/* Tablet */
+@media (max-width: 900px) {
+  .profile-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .edit-button-bottom {
+    justify-content: center;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+
+  .profile-page {
+    padding: 14px;
+  }
+
+  .profile-card {
+    border-radius: 14px;
+  }
+
+  .banner-wrapper,
+  .banner-img {
+    height: 110px;
+  }
+
+  .avatar-large {
+    width: 80px;
+    height: 80px;
+    font-size: 24px;
+  }
+
+  /* Stack labels above inputs */
+  .form-row {
+    grid-template-columns: 1fr;
+    align-items: flex-start;
+  }
+
+  .form-row label {
+    margin-bottom: 6px;
+  }
+
+  .form-row input,
+  .form-row select {
+    max-width: 100%;
+  }
+
+  .edit-button-bottom {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .primary-btn {
+    width: 100%;
+  }
 }

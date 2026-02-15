@@ -54,10 +54,6 @@ export const COMPLETION_BY_GRADE = [
 ];
 
 // ---------------- PLAYER ENGAGEMENT ----------------
-export const DAILY_ACTIVE_USERS = [
-  { day: "Mon", users: 400 }, { day: "Tue", users: 520 }, { day: "Wed", users: 610 },
-  { day: "Thu", users: 480 }, { day: "Fri", users: 730 }, { day: "Sat", users: 680 }, { day: "Sun", users: 750 },
-];
 
 export const WEEKLY_PLAYTIME = [
   { week: "Week 1", hours: 520 }, { week: "Week 2", hours: 680 },
@@ -71,11 +67,14 @@ export const TOP_PLAYERS = [
   // ...
 ];
 
-
-export const REGIONAL_COMPLETION = [
-  { id: 1, region: "Luzon (Intramuros)", active: "5,200", progress: 85 },
-  { id: 2, region: "Visayas (Mactan)", active: "3,100", progress: 62 },
-  { id: 3, region: "Mindanao (Dapitan)", active: "1,850", progress: 40 },
+export const DAILY_ACTIVE_USERS = [
+  { day: "Mon", users: 120 },
+  { day: "Tue", users: 145 },
+  { day: "Wed", users: 170 },
+  { day: "Thu", users: 160 },
+  { day: "Fri", users: 210 },
+  { day: "Sat", users: 260 },
+  { day: "Sun", users: 230 },
 ];
 
 // ---------------- PLAYER ENGAGEMENT (EXPANDED) ----------------
@@ -179,4 +178,141 @@ export const INSTALLS_VS_UNINSTALLS = [
   { month: "Feb", installs: 1270, uninstalls: 150 },
   { month: "Mar", installs: 1510, uninstalls: 180 },
   { month: "Apr", installs: 1850, uninstalls: 210 },
+];
+
+
+// ---------------- USER FEEDBACK DASHBOARD ----------------
+
+export const FEEDBACK_LIST = [
+  {
+    id: 1,
+    playerName: "PlayerOne",
+    rating: 5,
+    platform: "Android",
+    category: "Gameplay",
+    sentiment: "positive",
+    message: "My kids love the math challenges! Very engaging and fun.",
+    date: "2026-02-01",
+    status: "resolved",
+  },
+  {
+    id: 2,
+    playerName: "PlayerTwo",
+    rating: 4,
+    platform: "iOS",
+    category: "UI/UX",
+    sentiment: "positive",
+    message: "The design is colorful and easy to navigate.",
+    date: "2026-02-02",
+    status: "reviewing",
+  },
+  {
+    id: 3,
+    playerName: "PlayerThree",
+    rating: 3,
+    platform: "Android",
+    category: "Performance",
+    sentiment: "neutral",
+    message: "Game is good but sometimes lags on older devices.",
+    date: "2026-02-03",
+    status: "investigating",
+  },
+  {
+    id: 4,
+    playerName: "PlayerFour",
+    rating: 2,
+    platform: "Android",
+    category: "Bugs",
+    sentiment: "negative",
+    message: "App crashes when opening Chapter 3.",
+    date: "2026-02-04",
+    status: "open",
+  },
+  {
+    id: 5,
+    playerName: "PlayerFive",
+    rating: 5,
+    platform: "iOS",
+    category: "Content",
+    sentiment: "positive",
+    message: "Love the storytelling and characters!",
+    date: "2026-02-05",
+    status: "resolved",
+  },
+  {
+    id: 6,
+    playerName: "PlayerSix",
+    rating: 1,
+    platform: "Android",
+    category: "Performance",
+    sentiment: "negative",
+    message: "Game freezes frequently on my device.",
+    date: "2026-02-06",
+    status: "open",
+  },
+  {
+    id: 7,
+    playerName: "PlayerSeven",
+    rating: 4,
+    platform: "iOS",
+    category: "Features",
+    sentiment: "positive",
+    message: "Would love to see multiplayer mode added!",
+    date: "2026-02-07",
+    status: "planned",
+  },
+  {
+    id: 8,
+    playerName: "PlayerEight",
+    rating: 3,
+    platform: "Android",
+    category: "Gameplay",
+    sentiment: "neutral",
+    message: "Levels are fun but a bit repetitive after a while.",
+    date: "2026-02-08",
+    status: "reviewing",
+  },
+];
+
+
+// --------- FEEDBACK KPI SUMMARY ---------
+
+export const FEEDBACK_KPI = [
+  { title: "Total Feedback", value: 8, trend: "+12%", color: "#6366f1" },
+  { title: "Avg Rating", value: "3.4", trend: "+0.2", color: "#f59e0b" },
+  { title: "Positive Feedback", value: "50%", trend: "+5%", color: "#10b981" },
+  { title: "Negative Feedback", value: "25%", trend: "-3%", color: "#ef4444" },
+];
+
+
+// --------- FEEDBACK ANALYTICS ---------
+
+export const RATING_DISTRIBUTION = [
+  { rating: 5, count: 2 },
+  { rating: 4, count: 2 },
+  { rating: 3, count: 2 },
+  { rating: 2, count: 1 },
+  { rating: 1, count: 1 },
+];
+
+export const FEEDBACK_BY_CATEGORY = [
+  { category: "Gameplay", count: 2 },
+  { category: "Performance", count: 2 },
+  { category: "UI/UX", count: 1 },
+  { category: "Bugs", count: 1 },
+  { category: "Content", count: 1 },
+  { category: "Features", count: 1 },
+];
+
+export const FEEDBACK_BY_PLATFORM = [
+  { platform: "Android", count: 5 },
+  { platform: "iOS", count: 3 },
+];
+
+export const FEEDBACK_STATUS_DISTRIBUTION = [
+  { status: "open", count: 2 },
+  { status: "reviewing", count: 2 },
+  { status: "investigating", count: 1 },
+  { status: "planned", count: 1 },
+  { status: "resolved", count: 2 },
 ];

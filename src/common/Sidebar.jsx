@@ -85,7 +85,9 @@ const Sidebar = () => {
           <NavLink
             to="/dashboard"
             end
-            className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
+            className={({ isActive }) =>
+              isActive ? "nav-item active" : "nav-item"
+            }
           >
             <LayoutDashboard size={22} className="nav-icon" />
             {isOpen && <span className="nav-label">Dashboard</span>}
@@ -106,6 +108,12 @@ const Sidebar = () => {
             {isOpen && <span className="nav-label">Platform Stats</span>}
           </NavLink>
 
+          {/* ----------------- Feedback Item ----------------- */}
+          <NavLink to="/dashboard/feedback" className="nav-item">
+            <Zap size={22} className="nav-icon" />
+            {isOpen && <span className="nav-label">Feedback</span>}
+          </NavLink>
+
           <NavLink to="/dashboard/settings" className="nav-item">
             <Settings size={22} className="nav-icon" />
             {isOpen && <span className="nav-label">Settings</span>}
@@ -113,12 +121,6 @@ const Sidebar = () => {
         </nav>
 
         <div className="sidebar-bottom">
-          {isOpen && (
-            <button className="upgrade-btn" type="button">
-              <Zap size={16} fill="currentColor" /> Upgrade
-            </button>
-          )}
-
           <button
             className="logout-btn"
             type="button"

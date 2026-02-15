@@ -5,6 +5,7 @@ import Profile from "./Profile";
 import UserInsights from "./UserInsights";
 import PlayerEngagement from "./PlayerEngagement";
 import PlatformStats from "./PlatformStats";
+import Feedback from "./Feedback";
 import Settings from "./Settings";
 
 const PageRoute = () => {
@@ -16,6 +17,8 @@ const PageRoute = () => {
         <Route path="userinsights" element={<UserInsights />} />
         <Route path="playerengagement" element={<PlayerEngagement />} />
         <Route path="platformstats" element={<PlatformStats />} />
+        <Route path="feedback" element={<Feedback />} />
+
         <Route path="settings" element={<Settings />} />
       </Route>
     </Routes>

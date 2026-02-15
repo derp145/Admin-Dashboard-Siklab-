@@ -21,6 +21,7 @@ export default function SignUp() {
     e.preventDefault();
     setError("");
 
+    // ✅ Basic validation
     if (!fullName.trim()) return setError("Please enter your full name.");
     if (!email.includes("@")) return setError("Please enter a valid email.");
     if (password.length < 6)
@@ -30,17 +31,8 @@ export default function SignUp() {
 
     setLoading(true);
 
-    // ✅ SAVE USER LOCALLY (IMPORTANT)
-    const newUser = {
-      fullName,
-      email,
-      password,
-      profileImage: "",
-      birthdate: "",
-      gender: "",
-      contact: "",
-    };
-
+    // Save user locally for quick reference
+    const newUser = { fullName, email, password };
     localStorage.setItem("userProfile", JSON.stringify(newUser));
 
     if (DEV_MODE) {
@@ -50,17 +42,18 @@ export default function SignUp() {
       }, 500);
     } else {
       try {
-        const { error } = await supabase.auth.signInWithOtp({
-          email,
-          options: {
-            shouldCreateUser: true,
-            data: { fullName },
-          },
-        });
+        const { data, error } = await supabase.auth.signUp({
+  email,
+  password,
+  options: { data: { fullName } }
+});
+
+if (error) setError(error.message);
+else setShowModal(true); // show modal confirming account created
 
         setLoading(false);
         if (error) setError(error.message);
-        else setShowModal(true);
+        else setShowModal(true); // Show modal after sending link
       } catch {
         setLoading(false);
         setError("Something went wrong. Please try again.");
@@ -74,8 +67,7 @@ export default function SignUp() {
     setPassword("");
     setConfirmPassword("");
     if (!DEV_MODE) setEmail("");
-
-    navigate("/auth/signin");
+    navigate("/auth/signin"); // redirect to sign-in page after modal
   };
 
   return (
@@ -144,13 +136,19 @@ export default function SignUp() {
           </p>
         </div>
 
+        {/* ✅ Email confirmation modal */}
         {showModal && (
           <div className="modal-overlay-small">
             <div className="modal-glass-small">
               <h3>Check Your Email</h3>
-              <p style={{ color: "#9ca3af" }}>
-                A verification link has been sent to <b>{email}</b>.
-              </p>
+             <p style={{ color: "#9ca3af" }}>
+  A verification link has been sent to <b>{email}</b>.<br />
+  Click the link in your email to complete your signup.<br />
+  <span style={{ fontSize: "12px", color: "#94a3b8" }}>
+    If you don't see it in your inbox, please check your spam or junk folder.
+  </span>
+</p>
+
               <button className="primary-btn full-width" onClick={closeModal}>
                 Close
               </button>
