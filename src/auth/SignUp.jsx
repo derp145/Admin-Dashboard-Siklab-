@@ -1,107 +1,92 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { supabase } from "../supabaseClient";
 import "./Auth.css";
+
+const DEV_MODE = false;
+const DEMO_EMAIL = "chiojennifers@gmail.com";
 
 export default function SignUp() {
   const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(DEV_MODE ? DEMO_EMAIL : "");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
-  const [showVerifyModal, setShowVerifyModal] = useState(false);
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-
-  const [codeDigits, setCodeDigits] = useState(["", "", "", ""]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
-  const inputsRef = useRef([]);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    if (!fullName.trim()) {
-      setError("Please enter your full name.");
-      return;
-    }
-
-    if (!email.includes("@")) {
-      setError("Please enter a valid email.");
-      return;
-    }
-
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      setError("Passwords do not match!");
-      return;
-    }
+    if (!fullName.trim()) return setError("Please enter your full name.");
+    if (!email.includes("@")) return setError("Please enter a valid email.");
+    if (password.length < 6)
+      return setError("Password must be at least 6 characters.");
+    if (password !== confirmPassword)
+      return setError("Passwords do not match!");
 
     setLoading(true);
 
-    setTimeout(() => {
-      setLoading(false);
-      setShowVerifyModal(true);
-      setCodeDigits(["", "", "", ""]);
-    }, 800);
-  };
+    // ✅ SAVE USER LOCALLY (IMPORTANT)
+    const newUser = {
+      fullName,
+      email,
+      password,
+      profileImage: "",
+      birthdate: "",
+      gender: "",
+      contact: "",
+    };
 
-  const handleCodeChange = (index, value) => {
-    if (!/^\d?$/.test(value)) return;
+    localStorage.setItem("userProfile", JSON.stringify(newUser));
 
-    const newCode = [...codeDigits];
-    newCode[index] = value;
-    setCodeDigits(newCode);
+    if (DEV_MODE) {
+      setTimeout(() => {
+        setLoading(false);
+        setShowModal(true);
+      }, 500);
+    } else {
+      try {
+        const { error } = await supabase.auth.signInWithOtp({
+          email,
+          options: {
+            shouldCreateUser: true,
+            data: { fullName },
+          },
+        });
 
-    if (value && index < 3) {
-      inputsRef.current[index + 1].focus();
+        setLoading(false);
+        if (error) setError(error.message);
+        else setShowModal(true);
+      } catch {
+        setLoading(false);
+        setError("Something went wrong. Please try again.");
+      }
     }
   };
 
-  const handleVerifyCode = (e) => {
-    e.preventDefault();
-    setError("");
+  const closeModal = () => {
+    setShowModal(false);
+    setFullName("");
+    setPassword("");
+    setConfirmPassword("");
+    if (!DEV_MODE) setEmail("");
 
-    if (codeDigits.join("") !== "1234") {
-      setError("Invalid verification code.");
-      return;
-    }
-
-    setShowVerifyModal(false);
-    setShowSuccessModal(true);
-  };
-
-  const handleResend = () => {
-    setLoading(true);
-    setError("");
-
-    setTimeout(() => {
-      setLoading(false);
-      alert("A new verification code has been sent! (dummy)");
-    }, 800);
-  };
-
-  const handleCloseSuccess = () => {
-    setShowSuccessModal(false);
     navigate("/auth/signin");
   };
 
   return (
     <div className="auth-page">
       <div className="auth-card">
-        {/* LEFT PANEL */}
         <div className="auth-left">
           <div className="auth-left-overlay">
             <h1 className="siklab-logo">SIKLAB</h1>
           </div>
         </div>
 
-        {/* RIGHT PANEL */}
         <div className="auth-right">
           <h2>Create Account</h2>
           <p className="subtitle">Fill in your details to get started</p>
@@ -123,6 +108,7 @@ export default function SignUp() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={DEV_MODE}
             />
 
             <input
@@ -146,7 +132,7 @@ export default function SignUp() {
               type="submit"
               disabled={loading}
             >
-              {loading ? "Sending Code..." : "Sign Up"}
+              {loading ? "Sending Link..." : "Sign Up"}
             </button>
           </form>
 
@@ -158,56 +144,16 @@ export default function SignUp() {
           </p>
         </div>
 
-        {/* EMAIL VERIFICATION MODAL */}
-        {showVerifyModal && (
+        {showModal && (
           <div className="modal-overlay-small">
             <div className="modal-glass-small">
-              <h3>Verify Your Email</h3>
+              <h3>Check Your Email</h3>
               <p style={{ color: "#9ca3af" }}>
-                Enter the 4-digit code sent to your email
+                A verification link has been sent to <b>{email}</b>.
               </p>
-
-              {error && <div className="error-text">{error}</div>}
-
-              <form onSubmit={handleVerifyCode}>
-                <div className="code-inputs">
-                  {codeDigits.map((digit, i) => (
-                    <input
-                      key={i}
-                      ref={(el) => (inputsRef.current[i] = el)}
-                      type="text"
-                      maxLength="1"
-                      value={digit}
-                      onChange={(e) =>
-                        handleCodeChange(i, e.target.value)
-                      }
-                    />
-                  ))}
-                </div>
-<div className="modal-secondary">
-  <button
-    type="button"
-    className="link-btn"
-    onClick={handleResend}
-    disabled={loading}
-  >
-    {loading ? "Resending..." : "Resend"}
-  </button>
-
-  <button
-    type="button"
-    className="link-btn"
-    onClick={() => setShowVerifyModal(false)}
-  >
-    Cancel
-  </button>
-</div>
-
-<button className="primary-btn full-width" type="submit">
-  Verify & Create
-</button>
-
-              </form>
+              <button className="primary-btn full-width" onClick={closeModal}>
+                Close
+              </button>
             </div>
           </div>
         )}

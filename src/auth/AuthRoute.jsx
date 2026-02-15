@@ -1,18 +1,22 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
-import ForgotPass from "./ForgotPass";
-import NewPass from "./NewPass";
+import ForgotPassword from "./ForgotPass";
+import NewPass from "./NewPass"; // renamed ResetPassword to NewPass
 
-function AuthRoute() {
+export default function AuthRoute() {
+  const { session } = useAuth();
+
+  // If logged in, redirect to dashboard
+  if (session) return <Navigate to="/dashboard" />;
+
   return (
     <Routes>
       <Route path="signin" element={<SignIn />} />
       <Route path="signup" element={<SignUp />} />
-      <Route path="forgot" element={<ForgotPass />} />
-      <Route path="new-password" element={<NewPass />} />
+      <Route path="forgot-password" element={<ForgotPassword />} />
+      <Route path="reset-password" element={<NewPass />} />
     </Routes>
   );
 }
-
-export default AuthRoute;

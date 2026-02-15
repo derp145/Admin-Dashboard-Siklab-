@@ -1,21 +1,32 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { supabase } from "../supabaseClient";
 import "./Auth.css";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setLoading(true);
 
-    if (email === "admin" && password === "123") {
-      navigate("/dashboard");
-    } else {
-      setError("Invalid email or password.");
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) setError(error.message);
+      else navigate("/dashboard");
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -25,7 +36,6 @@ export default function SignIn() {
         <div className="auth-left">
           <div className="auth-left-overlay">
             <h1 className="siklab-logo">SIKLAB</h1>
-           
           </div>
         </div>
 
@@ -50,16 +60,26 @@ export default function SignIn() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            <button className="primary-btn" type="submit">Sign In</button>
+            <button
+              className={`primary-btn ${loading ? "loading-btn" : ""}`}
+              type="submit"
+              disabled={loading}
+            >
+              {loading ? "Signing In..." : "Sign In"}
+            </button>
           </form>
 
           <p style={{ marginTop: "12px" }}>
-            <Link to="/auth/forgot" className="link-btn">Forgot Password?</Link>
+            <Link to="/auth/forgot-password" className="link-btn">
+              Forgot Password?
+            </Link>
           </p>
 
           <p style={{ marginTop: "24px" }}>
             Don’t have an account?{" "}
-            <Link to="/auth/signup" className="link-btn">Sign Up</Link>
+            <Link to="/auth/signup" className="link-btn">
+              Sign Up
+            </Link>
           </p>
         </div>
       </div>

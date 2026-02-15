@@ -237,37 +237,6 @@ html, body, #root {
 }
 
 /* ===========================
-   OTP INPUTS
-=========================== */
-
-.code-inputs {
-  display: flex;
-  gap: 14px;
-  justify-content: center;
-  margin: 20px 0;
-}
-
-.code-inputs input {
-  width: 52px;
-  height: 60px;
-  text-align: center;
-  font-size: 22px;
-  font-weight: 700;
-  border-radius: 12px;
-  border: 1px solid #4b5563;
-  background: #1e2a45;
-  color: #fbbf59;
-}
-
-.code-inputs input:focus {
-  border-color: #fbbf59;
-  outline: none;
-  box-shadow:
-    0 0 0 1px rgba(251,191,89,0.5),
-    0 0 15px rgba(251,191,89,0.35);
-}
-
-/* ===========================
    MODAL OVERLAY
 =========================== */
 

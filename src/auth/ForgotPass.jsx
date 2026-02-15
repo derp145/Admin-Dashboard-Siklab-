@@ -1,113 +1,86 @@
-import React, { useState, useRef } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { supabase } from "../supabaseClient";
 import "./Auth.css";
 
+const DEV_MODE = false; // Toggle to false for real email
+const DEMO_EMAIL = "chiojennifers@gmail.com";
+
 export default function ForgotPass() {
-  const [email, setEmail] = useState("");
-  const [showVerifyModal, setShowVerifyModal] = useState(false);
-  const [codeDigits, setCodeDigits] = useState(["", "", "", ""]);
+  const [email, setEmail] = useState(DEV_MODE ? DEMO_EMAIL : "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
 
-  const inputsRef = useRef([]);
   const navigate = useNavigate();
 
-  const handleSendCode = (e) => {
+  const handleSendLink = async (e) => {
     e.preventDefault();
     setError("");
 
-    if (!email.includes("@")) {
-      setError("Please enter a valid email.");
-      return;
-    }
+    if (!email.includes("@")) return setError("Please enter a valid email.");
 
     setLoading(true);
 
-    setTimeout(() => {
-      setLoading(false);
-      setShowVerifyModal(true);
-      setCodeDigits(["", "", "", ""]);
-    }, 800);
-  };
-
-  const handleCodeChange = (index, value) => {
-    if (!/^\d?$/.test(value)) return;
-
-    const newCode = [...codeDigits];
-    newCode[index] = value;
-    setCodeDigits(newCode);
-
-    if (value && index < 3) {
-      inputsRef.current[index + 1].focus();
+    if (DEV_MODE) {
+      // Demo mode: popup only
+      setTimeout(() => {
+        setLoading(false);
+        setShowModal(true);
+      }, 500);
+    } else {
+      try {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: "http://localhost:5173/auth/new-password",
+        });
+        setLoading(false);
+        if (error) setError(error.message);
+        else setShowModal(true);
+      } catch {
+        setLoading(false);
+        setError("Something went wrong. Please try again.");
+      }
     }
   };
 
-  const handleKeyDown = (index, e) => {
-    if (e.key === "Backspace" && !codeDigits[index] && index > 0) {
-      inputsRef.current[index - 1].focus();
-    }
-  };
-
-  const handleVerifyCode = (e) => {
-    e.preventDefault();
-    setError("");
-
-    const code = codeDigits.join("");
-
-    if (code !== "1234") {
-      setError("Invalid verification code.");
-      return;
-    }
-
-    setShowVerifyModal(false);
-    navigate("/auth/new-password");
-  };
-
-  const handleResend = () => {
-    setLoading(true);
-    setError("");
-
-    setTimeout(() => {
-      setLoading(false);
-      alert("A new verification code has been sent! (dummy)");
-    }, 800);
+  const closeModal = () => {
+    setShowModal(false);
+    if (!DEV_MODE) setEmail("");
+    navigate("/auth/signin");
   };
 
   return (
     <div className="auth-page">
       <div className="auth-card">
-        {/* LEFT PANEL */}
         <div className="auth-left">
           <div className="auth-left-overlay">
             <h1 className="siklab-logo">SIKLAB</h1>
-           
           </div>
         </div>
 
-        {/* RIGHT PANEL */}
         <div className="auth-right">
           <h2>Reset Password</h2>
           <p className="subtitle">
-            Enter your email to receive a verification code.
+            Enter your email to receive a password reset link.
           </p>
 
           {error && <div className="error-text">{error}</div>}
 
-          <form onSubmit={handleSendCode}>
+          <form onSubmit={handleSendLink}>
             <input
               type="email"
               placeholder="Enter email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={DEV_MODE} // prevent editing demo email
             />
-
             <button
               className={`primary-btn ${loading ? "loading-btn" : ""}`}
               type="submit"
               disabled={loading}
             >
-              {loading ? "Sending..." : "Send Code"}
+              {loading ? "Sending..." : "Send Reset Link"}
             </button>
           </form>
 
@@ -119,57 +92,17 @@ export default function ForgotPass() {
           </p>
         </div>
 
-        {/* VERIFICATION MODAL (Consistent with other auth pages) */}
-        {showVerifyModal && (
+        {showModal && (
           <div className="modal-overlay-small">
             <div className="modal-glass-small">
-              <h3>Verify Your Email</h3>
+              <h3>Check Your Email</h3>
               <p style={{ color: "#9ca3af" }}>
-                Enter the 4-digit code sent to your email
+                A password reset link has been sent to <b>{email}</b>. Click it
+                to reset your password.
               </p>
-
-              {error && <div className="error-text">{error}</div>}
-
-              <form onSubmit={handleVerifyCode}>
-                <div className="code-inputs">
-                  {codeDigits.map((digit, i) => (
-                    <input
-                      key={i}
-                      ref={(el) => (inputsRef.current[i] = el)}
-                      type="text"
-                      maxLength="1"
-                      value={digit}
-                      onChange={(e) =>
-                        handleCodeChange(i, e.target.value)
-                      }
-                      onKeyDown={(e) => handleKeyDown(i, e)}
-                    />
-                  ))}
-                </div>
-<div className="modal-secondary">
-  <button
-    type="button"
-    className="link-btn"
-    onClick={handleResend}
-    disabled={loading}
-  >
-    {loading ? "Resending..." : "Resend"}
-  </button>
-
-  <button
-    type="button"
-    className="link-btn"
-    onClick={() => setShowVerifyModal(false)}
-  >
-    Cancel
-  </button>
-</div>
-
-<button className="primary-btn full-width" type="submit">
-  Verify
-</button>
-
-              </form>
+              <button className="primary-btn full-width" onClick={closeModal}>
+                Close
+              </button>
             </div>
           </div>
         )}

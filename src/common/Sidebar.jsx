@@ -12,31 +12,35 @@ import {
   Zap,
   X,
 } from "lucide-react";
+import { supabase } from "../supabaseClient";
+import { useAuth } from "../auth/AuthContext";
 import "./Sidebar.css";
 
 const Sidebar = () => {
   const navigate = useNavigate();
+  const { session } = useAuth(); // reactive to Supabase session
   const [isOpen, setIsOpen] = useState(true);
-
-  // ✅ modal state
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const modalRef = useRef(null);
 
   const toggleSidebar = () => setIsOpen((v) => !v);
 
-  const handleLogout = () => {
-    // your actual logout action later (clear tokens, etc.)
-    navigate("/auth/signin", { replace: true });
+  // ✅ handle Supabase logout
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut(); // logs out
+      setShowLogoutModal(false);
+      navigate("/auth/signin", { replace: true });
+    } catch (error) {
+      console.error("Logout error:", error.message);
+    }
   };
 
   // ✅ close modal on ESC and click outside
   useEffect(() => {
     if (!showLogoutModal) return;
 
-    const onKeyDown = (e) => {
-      if (e.key === "Escape") setShowLogoutModal(false);
-    };
-
+    const onKeyDown = (e) => e.key === "Escape" && setShowLogoutModal(false);
     const onMouseDown = (e) => {
       if (modalRef.current && !modalRef.current.contains(e.target)) {
         setShowLogoutModal(false);
@@ -51,6 +55,9 @@ const Sidebar = () => {
       document.removeEventListener("mousedown", onMouseDown);
     };
   }, [showLogoutModal]);
+
+  // ✅ Fully reactive: hide sidebar if no session
+  if (!session) return null;
 
   return (
     <>
@@ -78,9 +85,7 @@ const Sidebar = () => {
           <NavLink
             to="/dashboard"
             end
-            className={({ isActive }) =>
-              isActive ? "nav-item active" : "nav-item"
-            }
+            className={({ isActive }) => (isActive ? "nav-item active" : "nav-item")}
           >
             <LayoutDashboard size={22} className="nav-icon" />
             {isOpen && <span className="nav-label">Dashboard</span>}
@@ -114,7 +119,6 @@ const Sidebar = () => {
             </button>
           )}
 
-          {/* ✅ open modal instead of logging out instantly */}
           <button
             className="logout-btn"
             type="button"
@@ -126,7 +130,7 @@ const Sidebar = () => {
         </div>
       </aside>
 
-      {/* ✅ LOGOUT MODAL */}
+      {/* Logout Modal */}
       {showLogoutModal && (
         <div className="modal-overlay" role="dialog" aria-modal="true">
           <div className="modal-card" ref={modalRef}>
